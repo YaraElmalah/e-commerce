@@ -1,0 +1,1 @@
+$noNavbar ==> Variable that identifies that we Would include Navbar in the Page that Contained it.

@@ -1,0 +1,58 @@
+/*Main Rules*/
+body{
+	background-color: #F4f4f4;
+	font-size: 16px;
+	font-family: Arial
+}
+/*End Rules*/
+
+/*Start Login Form*/
+.login{
+	width: 500px;
+	margin: 100px auto;
+}
+.login h4{
+	color: #333;
+	font-family: 'Lobster', cursive;
+	margin-bottom: 20px;
+    font-size: 65px;
+}
+.login .form-control{
+	background-color: #E4E4E4
+}
+.login input{
+	margin-bottom: 10px;
+}
+.login .btn{
+	background-color: #008dde
+}
+
+/*End Login Form*/
+/*****Start Bootsrap Edits****/
+.navbar{
+	border-radius: 0;
+	margin-bottom: 0
+}
+.nav> li> a,
+.navbar-brand{
+  padding: 15px 12px
+}
+.navbar-brand{
+	font-size: 2em
+}
+.navbar-inverse .navbar-nav>.open>a, 
+.navbar-inverse .navbar-nav>.open>a:focus,
+ .navbar-inverse .navbar-nav>.open>a:hover, 
+ .dropdown-menu{
+background-color: #2e86de
+}
+.dropdown-menu{
+	font-size: 1em;
+	min-width: 180px;
+	padding: 0
+}
+.dropdown-menu>li>a{
+	color: #fff;
+	padding: 10px 15px
+}
+/*****End Bootsrap Edits****/

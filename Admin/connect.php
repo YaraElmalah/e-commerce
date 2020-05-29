@@ -13,7 +13,6 @@ $option = array(
 try{
   $connect  = new PDO($dsn, $user, $pass, $option);
   $connect -> setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
-  echo "Connected to the Database";
 }
 catch(PDOException $e){
   echo "Failed to Connect " . $e -> getMessage();
