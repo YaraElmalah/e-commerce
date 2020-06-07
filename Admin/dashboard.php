@@ -1,5 +1,7 @@
 <?php
 session_start();
+//MyVariables
+$pageTitle = "Dashboard";
 include 'init.php';
 if(isset($_SESSION['username'])){
 	echo "Welcome " . $_SESSION['username'];

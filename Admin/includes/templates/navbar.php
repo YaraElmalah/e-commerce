@@ -16,7 +16,7 @@
       <ul class="nav navbar-nav">
         <li><a href="#"><?php echo lang('sections') ?><span class="sr-only">(current)</span></a></li>
        <li><a href="#"><?php echo lang('items') ?><span class="sr-only">(current)</span></a></li>
-        <li><a href="#"><?php echo lang('members') ?><span class="sr-only">(current)</span></a></li>
+        <li><a href="members.php"><?php echo lang('members') ?><span class="sr-only">(current)</span></a></li>
         <li><a href="#"><?php echo lang('statistics') ?><span class="sr-only">(current)</span></a></li>
         <li><a href="#"><?php echo lang('logs') ?><span class="sr-only">(current)</span></a></li>
               </ul>
@@ -24,10 +24,10 @@
         <li class="dropdown">
           <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false"><?php echo $_SESSION['username'] ?><span class="caret"></span></a>
           <ul class="dropdown-menu">
-            <li><a href="#"><?php echo lang('edit-profile') ?></a></li>
+            <li><a href="members.php?do=Edit&userid=<?php echo $_SESSION['id']; ?>"><?php echo lang('edit-profile') ?></a></li>
             <li><a href="#"><?php echo lang('settings') ?></a></li>
             <li role="separator" class="divider"></li>
-            <li><a href="#">logout</a></li>
+            <li><a href="logout.php">logout</a></li>
           </ul>
         </li>
       </ul>

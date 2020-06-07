@@ -1,1 +1,5 @@
 $noNavbar ==> Variable that identifies that we Would include Navbar in the Page that Contained it.
+$pageTitle ==> The Name that Would appear in the Top of the Page (browser) if is not Existed then it Would Put the Default (BuyIt)
+/*
+We get the Edit Profile for the Users controlling the 'UserID' for specific user
+*/
