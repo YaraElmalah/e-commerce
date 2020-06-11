@@ -3,3 +3,5 @@ $pageTitle ==> The Name that Would appear in the Top of the Page (browser) if is
 /*
 We get the Edit Profile for the Users controlling the 'UserID' for specific user
 */
+Why We put an input(type="hidden") ==> to send it to the update page
+We Will have Validate on : Client-Side and Server-Side

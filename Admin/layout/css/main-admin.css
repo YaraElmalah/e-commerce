@@ -4,6 +4,19 @@ body{
 	font-size: 16px;
 	font-family: Arial
 }
+.asterisk{
+	position: absolute;
+	right: 0;
+	top: 5px;
+	right: 30px;
+	color: #f00;
+	font-size: 25px
+}
+.fa-low-vision{
+	position: absolute;
+	top: 10px;
+    right: 46px;
+}
 /*End Rules*/
 
 /*Start Login Form*/
@@ -54,6 +67,14 @@ background-color: #2e86de
 .dropdown-menu>li>a{
 	color: #fff;
 	padding: 10px 15px
+}
+.form-control{
+	position: relative;
+}
+.main-table tr th{
+	background-color: #333;
+	color: #fff;
+	text-align: center
 }
 /*****End Bootsrap Edits****/
 /*Start Members Page*/
