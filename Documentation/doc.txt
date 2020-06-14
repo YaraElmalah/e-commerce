@@ -5,3 +5,10 @@ We get the Edit Profile for the Users controlling the 'UserID' for specific user
 */
 Why We put an input(type="hidden") ==> to send it to the update page
 We Will have Validate on : Client-Side and Server-Side
+redirectHome($error, $seconds) ==> redirect the user to homepage if he entered a page that are not have the permissions to enter 
+it has 2 Parameters -> $error which is the error message that would appear
+				    -> $seconds which is the number of seconds that after it will  be redirected
+countItems ==> Count Column in the Database
+$items = The Items to Count
+$table = the table to chose from 
+Syntax ==> countItems($items, $table)

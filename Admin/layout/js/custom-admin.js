@@ -20,4 +20,8 @@ $(function(){
 	}, function(){
 		passField.attr('type', 'password');
 	})
+	//Confirm Message On Delete Member Button
+	$('.confirm').on('click', function(){
+		return confirm('Are You Sure?');
+	})
 })

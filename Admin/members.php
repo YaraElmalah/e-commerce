@@ -13,10 +13,12 @@ if(isset($_SESSION['username'])){
 $do = isset($_GET['do'])? $_GET['do']: $do = 'Manage'; 
 //Assign do;
 //Create Our Page Depends on the $_GET
-if($do == 'Manage'){ //Manage Page?>
-	<h1 class="text-center">Manage Members</h1>
+if($do == 'Manage'){ //Manage Page
+	?>
 	<div class="container">
-	<a href='members.php?do=Add' class="btn btn-primary">Add New Member</a>
+		<h1 class="text-center">Manage Members</h1>
+	<a href='members.php?do=Add' class="btn btn-primary">
+	 <i class="fas fa-user-plus"></i> New Member</a>
 	<div class="table-responsive">
 		<table class="table table-bordered text-center main-table">
 			<tr>
@@ -41,10 +43,10 @@ if($do == 'Manage'){ //Manage Page?>
 						 echo "<td>" . $row['username'] . "</td>";
 						 echo "<td>" . $row['Email'] . "</td>";
 						 echo "<td>" . $row['Full-Name'] . "</td>";
-						 echo "<td>" . " " . "</td>";
+						 echo "<td>" . $row['date'] . "</td>";
 						 echo "<td>" . "<a href='members.php?do=Edit&userid=" . 
-						 $row['UserID'] .  "' class='btn btn-success'>Edit</a>" . 
-					"<a href='#' class='btn btn-danger'>Delete</a>"; 
+						 $row['UserID'] .  "' class='btn btn-success'> <i class=\"fas fa-user-edit\"></i> Edit</a> " . 
+					"<a href='members.php?do=Delete&userid=" . $row['UserID'] . "' class='btn btn-danger confirm'> <i class=\"fas fa-user-slash\"></i> Delete</a>"; 
 						 echo "</tr>";
 					}
 			?>
@@ -194,7 +196,8 @@ if($do == 'Manage'){ //Manage Page?>
 		</form>
 	</div> <?php
 		} else{
-			echo "Wrong There is no such user";
+			$errorMsg =  "Wrong There is no such user";
+			redirectHome($errorMsg);
 		}
 	
         } 
@@ -230,12 +233,22 @@ elseif ($do == "Update") {
 			//Database Query
 			//Check if There is no errors 
 			if(empty($formErrors)){
-		    //Update Database with this info
-		     $stmt = $connect->prepare("UPDATE `shop-users` 
-			SET username = ? , Email = ? ,  `Full-Name` = ? where UserID = ?");
-	     	$stmt->execute(array($username, $email, $full, $id));
-	     	//Echo Success Message
-	     	echo "<div class='alert alert-success'>" .  $stmt->rowCount() . " Record Updated </div>";
+				$check = checkItem('username','`shop-users`', $username);
+	            if($check == 1){
+		             $error =  "<div class='container'>
+		                        <div class='alert alert-danger'>The username is already existed</div>";
+		             redirectHome($error, 'back');
+		         } else{
+		         	//Update Database with this info
+			     $stmt = $connect->prepare("UPDATE `shop-users` 
+				SET username = ? , Email = ? ,  `Full-Name` = ? where UserID = ?");
+		     	$stmt->execute(array($username, $email, $full, $id));
+		     	//Echo Success Message
+		     	$success =  " <div class='container'>
+		     	              <div class='alert alert-success'>" .  $stmt->rowCount() . " Record Updated </div>";
+		     	redirectHome($success);
+		         }
+		    
 			} else{
 				//Get The Errors
 	          foreach ($formErrors as $error) {
@@ -284,38 +297,83 @@ elseif ($do == "Insert") { //Insert Page
 		//Database Query
 			//Check if There is no errors 
 			if(empty($formErrors)){
-		    //Insert this info into Database 
-		   	$stmt =  $connect->prepare("INSERT INTO `shop-users`(username, Password, Email, `Full-Name`) 
-		   		VALUES (:user, :pass, :mail, :full)");
-		   	$stmt->execute(array(
-		   		':user' => $username,
-		   		':pass' => $hashedPass,
-		   		':mail' => $email,
-		   		':full' => $full
-		   	));
-	     	//Echo Success Message
-	     	echo "<div class='alert alert-success'>" .  $stmt->rowCount() . " Member Added</div>";
+				$check = checkItem('username','`shop-users`', $username);
+	            if($check == 1){
+		             $error =  "<div class='container'>
+		                        <div class='alert alert-danger'>The username is already existed</div>";
+		             redirectHome($error, 'back');
+	            } else{
+	             	//Insert this info into Database 
+				   	$stmt =  $connect->prepare("INSERT INTO `shop-users`(username, Password, Email, `Full-Name`, date) 
+				   		VALUES (:user, :pass, :mail, :full, now())");
+				   	$stmt->execute(array(
+				   		':user' => $username,
+				   		':pass' => $hashedPass,
+				   		':mail' => $email,
+				   		':full' => $full
+				   	));
+			     	//Echo Success Message
+			     	$success = "<div class='container'>
+			     	            <div class='alert alert-success'>" .  $stmt->rowCount() . " Member Added</div>";
+			     	redirectHome($success, 'back');
+				}
+		    
 			} else{
 				//Get The Errors
+				echo "<div class='container'>";
 	          foreach ($formErrors as $error) {
 				echo "<div class='alert alert-danger'>"  . 
 				$error . "</div>";
-			}
+			 }
+				$editMsg = "<div class='alert alert-info'> Please refill the inputs to complete the Process</div>";
+				redirectHome($editMsg, 'back' , 5);
+
 			}
 			
 		
 
       } else{
-		header('location: members.php');
+      	$error = " <div class='container'>
+      	            <div class='alert alert-danger'>You are not Allowed to browse this Page</div>
+      	            ";
+		redirectHome($error, 3);
 	}
 }
-elseif ($do == "Delete") {
-	echo "Delete";
+elseif ($do == "Delete") { //Delete Page ?>
+			<div class="container">
+				<h1 class="text-center">Delete Member</h1>
+			
+ <?php
+		$userid = isset($_GET['userid']) 
+		&& is_numeric($_GET['userid'])? 
+		intval($_GET['userid']): 0; //That is our user that we would deal with
+		//Now We get the Record from database
+		$check = checkItem( 'UserID' , '`shop-users`', $userid);
+		//if We have a record then it must be > 0
+		if($check > 0){ // User Existed
+			//Delete Query
+				$stmt = $connect->prepare("DELETE FROM `shop-users` WHERE
+					                       UserID = :user");
+				$stmt->bindParam(":user" , $userid);
+				$stmt->execute();
+				//Echo Success Message
+			 $success =  "<div class='container'>
+			                <div class='alert alert-success'>" .  $stmt->rowCount() . " Record Deleted </div> </div>";
+			 redirectHome($success);
+		} else{
+			$error = " <div class='container'>
+			               <div class='alert alert-danger'>There is No Such User</div> 
+			            ";
+			redirectHome($error, 'back');
+		}
 } 
 elseif ($do == "Stats") {
 	echo "Stats";
 } else{
-	echo "Error There's no Page With this Name";
+	$error = " <div class='container'>
+	            <div class='alert alert-danger'>There's no Page With this Name</div>
+	            ";
+			redirectHome($error);
 }
 	include $templates . 'footer.php';
 } else{

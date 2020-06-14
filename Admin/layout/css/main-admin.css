@@ -41,6 +41,21 @@ body{
 }
 
 /*End Login Form*/
+/*Start Dashboard Page*/
+.home-stats .stat{
+	background: #fff;
+	border: 1px solid #CCC;
+	padding: 20px;
+	font-size: 15px
+}
+.home-stats .stat span{
+	display: block;
+	font-size: 50px
+}
+.latest{
+	margin: 40px;
+}
+/*End Dashboard Page*/
 /*****Start Bootsrap Edits****/
 .navbar{
 	border-radius: 0;
@@ -71,14 +86,22 @@ background-color: #2e86de
 .form-control{
 	position: relative;
 }
+.main-table{
+	-webkit-box-shadow: 0 3px 10px #ccc;
+	-moz-box-shadow: 0 3px 10px #ccc;
+	-o-box-shadow: 0 3px 10px #ccc;
+	box-shadow: 0 3px 10px #ccc
+}
 .main-table tr th{
 	background-color: #333;
 	color: #fff;
 	text-align: center
 }
-/*****End Bootsrap Edits****/
-/*Start Members Page*/
-h1{
-
+.main-table td{
+	background-color: #fff;
+	vertical-align: middle !important;
 }
-/*End Members Page*/
+.main-table .btn{
+	padding: 3px 10px
+}
+/*****End Bootsrap Edits****/
