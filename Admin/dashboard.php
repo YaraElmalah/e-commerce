@@ -4,6 +4,8 @@ if(isset($_SESSION['username'])){
 //MyVariables
 $pageTitle = "Dashboard";
 include 'init.php';
+$order = 5;
+$LatestMembers =  getLatest('*', '`shop-users`', 'UserID', $order);
 /*Start Dashboard Page*/
 ?>
 	<!--Start Statistics of the Web-->
@@ -12,27 +14,34 @@ include 'init.php';
 			<h1 class="text-capitalize">admin dashboard</h1>
 			<div class="row">
 				<div class="col-sm-3">
-					<div class="stat">
-						<h3 class="text-capitalize">total members</h3>
-						<span>
-							<?php echo countItems('UserID', '`shop-users`')?>
-							</span>
+					<div class="stat st-members">
+						<a href="members.php">
+							<h3 class="text-capitalize">total members</h3>
+							<span>
+								<?php 
+								echo countAndSelect('UserID', '`shop-users`');?>
+								</span>
+						</a>
 					</div>
 				</div>
 				<div class="col-sm-3">
-					<div class="stat">
+					<div class="stat st-pending">
+						<a href="members.php?do=Manage&page=Pending">
 						<h3 class="text-capitalize">pending members</h3>
-						<span>25</span>
+						<span><?php 
+						echo countAndSelect('RegStatus', '`shop-users`', 0); 
+						?></span>
+					    </a>
 					</div>
 				</div>
 				<div class="col-sm-3">
-					<div class="stat">
+					<div class="stat st-items">
 						<h3 class="text-capitalize">total items</h3>
 						<span>1500</span>
 					</div>
 				</div>
 				<div class="col-sm-3">
-					<div class="stat">
+					<div class="stat st-comments">
 						<h3 class="text-capitalize">total comments</h3>
 						<span>3500</span>
 					</div>
@@ -50,10 +59,14 @@ include 'init.php';
 					<div class="panel panel-default">
 						<div class="panel-heading text-capitalize">
 							<i class="fas fa-users"></i>
-							latest registered users
+							latest <?php echo $order; ?>  registered users
 						</div>
 						<div class="panel-body">
-							Test
+							<?php 
+							foreach ($LatestMembers as $member) {
+								echo $member['username'] . "<br>";
+							}
+							 ?> 
 						</div>
 					</div>	
 				</div>

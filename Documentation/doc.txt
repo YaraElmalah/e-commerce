@@ -8,7 +8,26 @@ We Will have Validate on : Client-Side and Server-Side
 redirectHome($error, $seconds) ==> redirect the user to homepage if he entered a page that are not have the permissions to enter 
 it has 2 Parameters -> $error which is the error message that would appear
 				    -> $seconds which is the number of seconds that after it will  be redirected
+checkItem ==> Function to check item if it exists in Database
+[Function accepts Parameters] ==> 
+$select -> the item to Select [example: user, item, category]
+$from   -> the table to Select from [example: users, items, categories]
+$value  -> the value of Select[example: Yara, Laptop, Electronics]
+Note: We make any Variable defined outside the function global to can access it
+if You Want to check from an specific column write $select = $value
 countItems ==> Count Column in the Database
 $items = The Items to Count
 $table = the table to chose from 
 Syntax ==> countItems($items, $table)
+countAndSelect ==> is a merge of two old function (checkItems, checkItem)
+Parameters ==> 
+$items ==> the select or items that you want to select or count
+$table ==> You Want Select from 
+$value ==> The Value You want search on (Default = "")
+if we don't Pass a Parameter then it will take value = ""
+getLatest($select, $from, order, $limit)
+get the latest Items or user or .. etc from the Database
+$select ==> the Column You to select
+$table ==> The table You want to get from Data
+$order ==> the column you want to order by 
+$limit ==> number of records you want to show (Default is 5)

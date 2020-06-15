@@ -14,6 +14,11 @@ $do = isset($_GET['do'])? $_GET['do']: $do = 'Manage';
 //Assign do;
 //Create Our Page Depends on the $_GET
 if($do == 'Manage'){ //Manage Page
+	if(isset($_GET['page'])){
+		$query = "AND RegStatus = 0";
+	} else{
+		$query = "";
+	}
 	?>
 	<div class="container">
 		<h1 class="text-center">Manage Members</h1>
@@ -33,7 +38,7 @@ if($do == 'Manage'){ //Manage Page
 			//We can add to the querry (WHERE groupID != 1 as no the the Admin included)
 					$stmt = $connect->prepare("
 						SELECT * FROM `shop-users`  
-						");
+						WHERE groupID != 1 $query");
 					$stmt-> execute(); //Execute the Statement
 					//Assign To a Variable
 					$rows = $stmt-> FetchAll(); //get All members
@@ -47,6 +52,12 @@ if($do == 'Manage'){ //Manage Page
 						 echo "<td>" . "<a href='members.php?do=Edit&userid=" . 
 						 $row['UserID'] .  "' class='btn btn-success'> <i class=\"fas fa-user-edit\"></i> Edit</a> " . 
 					"<a href='members.php?do=Delete&userid=" . $row['UserID'] . "' class='btn btn-danger confirm'> <i class=\"fas fa-user-slash\"></i> Delete</a>"; 
+						if($row['RegStatus'] == 0){
+
+						echo " <a href='members.php?do=Active&userid=" . $row['UserID'] . " ' class='btn btn-info activate'><i class=\"fas fa-skiing\"></i> Activate </a>";
+
+						}
+
 						 echo "</tr>";
 					}
 			?>
@@ -304,8 +315,8 @@ elseif ($do == "Insert") { //Insert Page
 		             redirectHome($error, 'back');
 	            } else{
 	             	//Insert this info into Database 
-				   	$stmt =  $connect->prepare("INSERT INTO `shop-users`(username, Password, Email, `Full-Name`, date) 
-				   		VALUES (:user, :pass, :mail, :full, now())");
+				   	$stmt =  $connect->prepare("INSERT INTO `shop-users`(username, Password, Email, `Full-Name`,RegStatus ,date) 
+				   		VALUES (:user, :pass, :mail, :full, 1 ,now())");
 				   	$stmt->execute(array(
 				   		':user' => $username,
 				   		':pass' => $hashedPass,
@@ -340,7 +351,8 @@ elseif ($do == "Insert") { //Insert Page
 	}
 }
 elseif ($do == "Delete") { //Delete Page ?>
-			<div class="container">
+
+			   <div class="container">
 				<h1 class="text-center">Delete Member</h1>
 			
  <?php
@@ -367,10 +379,37 @@ elseif ($do == "Delete") { //Delete Page ?>
 			redirectHome($error, 'back');
 		}
 } 
-elseif ($do == "Stats") {
-	echo "Stats";
+elseif ($do == "Active") { //Activate Page ?>
+	          <div class="container">
+				<h1 class="text-center">Activate Member</h1>
+			
+ <?php
+		$userid = isset($_GET['userid']) 
+		&& is_numeric($_GET['userid'])? 
+		intval($_GET['userid']): 0; //That is our user that we would deal with
+		//Now We get the Record from database
+		$check = checkItem( 'UserID' , '`shop-users`', $userid);
+		//if We have a record then it must be > 0
+		if($check > 0){ // User Existed
+			//Delete Query
+				$stmt = $connect->prepare("	UPDATE `shop-users`SET RegStatus = 1 WHERE  UserID = :user");
+				$stmt->bindParam(":user" , $userid);
+				$stmt->execute();
+				//Echo Success Message
+			 $success =  "<div class='container'>
+			                <div class='alert alert-success'>" .  $stmt->rowCount() . " Record Activated </div> </div>";
+			 redirectHome($success, 'back');
+		} else{
+			$error = " <div class='container'>
+			               <div class='alert alert-danger'>There is No Such User</div> 
+			            ";
+			redirectHome($error, 'back');
+		}
+	
 } else{
-	$error = " <div class='container'>
+	$error = " 
+	            <div class='container'>
+	            <h1 class='text-center'>Error 404</h1>
 	            <div class='alert alert-danger'>There's no Page With this Name</div>
 	            ";
 			redirectHome($error);

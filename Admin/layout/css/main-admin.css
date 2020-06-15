@@ -43,11 +43,31 @@ body{
 /*End Login Form*/
 /*Start Dashboard Page*/
 .home-stats .stat{
-	background: #fff;
+	color: #fff;
 	border: 1px solid #CCC;
 	padding: 20px;
-	font-size: 15px
+	font-size: 15px;
+	border-radius: 10px
 }
+.home-stats .stat a{
+	color: #fff
+}
+.home-stats .stat a:hover{
+	text-decoration: none
+}
+.home-stats .st-members{
+	background-color: #eb4d4b
+}
+.home-stats .st-pending{
+	background-color: #4834d4
+}
+.home-stats .st-items{
+	background-color: #e056fd
+}
+.home-stats .st-comments{
+	background-color: #22a6b3
+}
+
 .home-stats .stat span{
 	display: block;
 	font-size: 50px
