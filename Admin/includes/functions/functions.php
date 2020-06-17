@@ -1,4 +1,5 @@
 <?php
+ob_start();
 //getTitle Page V1.0
 /*
 Get Title of the page
@@ -29,6 +30,7 @@ function redirectHome($errorMsg, $url = null, $seconds = 3){
 			$link = 'Previous Page';
 		} else{
 			$url = 'index.php';
+			$link = 'Previous Page';
 		}
 	}
  echo $errorMsg;
@@ -107,3 +109,5 @@ function getLatest($select, $table, $order ,$limit = 5){
 	$rows = $getData->fetchAll(); //get the Latest data from Database As an Array
 	return $rows;
 }
+ob_end_flush();
+?>

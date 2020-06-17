@@ -14,7 +14,7 @@
     <!-- Collect the nav links, forms, and other content for toggling -->
     <div class="collapse navbar-collapse" id="nav-toggle">
       <ul class="nav navbar-nav">
-        <li><a href="#"><?php echo lang('sections') ?><span class="sr-only">(current)</span></a></li>
+        <li><a href="categories.php"><?php echo lang('sections') ?><span class="sr-only">(current)</span></a></li>
        <li><a href="#"><?php echo lang('items') ?><span class="sr-only">(current)</span></a></li>
         <li><a href="members.php"><?php echo lang('members') ?><span class="sr-only">(current)</span></a></li>
         <li><a href="#"><?php echo lang('statistics') ?><span class="sr-only">(current)</span></a></li>

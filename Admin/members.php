@@ -1,4 +1,5 @@
 <?php
+ob_start();
 $pageTitle = "Members";
 /*=====
 	Manage Member Page 
@@ -420,3 +421,5 @@ elseif ($do == "Active") { //Activate Page ?>
 	exit(); //Stop the Script
 	 //Redirect To the Login Page if there is no  Session
 }
+ob_end_flush();
+?>

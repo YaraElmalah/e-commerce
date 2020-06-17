@@ -1,4 +1,5 @@
 <?php
+ob_start();
   session_start();
   //MyVariables
    $noNavbar = '';
@@ -47,4 +48,5 @@
  	<!--End Login Form-->
 <?php
   include $templates . 'footer.php';
+  ob_end_flush();
  ?>

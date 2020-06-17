@@ -1,10 +1,11 @@
 <?php
+ob_start(); //Output Buffering Start
 session_start();
 if(isset($_SESSION['username'])){
 //MyVariables
 $pageTitle = "Dashboard";
 include 'init.php';
-$order = 5;
+$order = 10;
 $LatestMembers =  getLatest('*', '`shop-users`', 'UserID', $order);
 /*Start Dashboard Page*/
 ?>
@@ -62,11 +63,24 @@ $LatestMembers =  getLatest('*', '`shop-users`', 'UserID', $order);
 							latest <?php echo $order; ?>  registered users
 						</div>
 						<div class="panel-body">
+							<ul class="list-unstyled latest-users">
 							<?php 
 							foreach ($LatestMembers as $member) {
-								echo $member['username'] . "<br>";
+								echo "<li>" .  $member['username'];
+								echo "<a href='members.php?do=Edit&userid=" . 
+						 $member['UserID'] .  "' class='btn btn-success pull-right'> <i class=\"fas fa-user-edit\"></i> Edit</a>  " . 
+					"<a href='members.php?do=Delete&userid=" . $member['UserID'] . "' class='btn btn-danger confirm pull-right'> <i class=\"fas fa-user-slash\"></i> Delete</a>"; 
+						if($member['RegStatus'] == 0){
+
+						echo " <a href='members.php?do=Active&userid=" . $member['UserID'] . " ' class='btn btn-info activate pull-right'><i class=\"fas fa-skiing\"></i> Activate </a>";
+
+						}
+						echo "</li>";
+						
+
 							}
 							 ?> 
+							</ul>
 						</div>
 					</div>	
 				</div>
@@ -94,3 +108,5 @@ include $templates . 'footer.php';
 	header('location: index.php'); //if there's no Session return to the login Page
 	exit();
 }
+ob_end_flush(); //Release the output
+?>

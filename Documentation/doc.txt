@@ -31,3 +31,9 @@ $select ==> the Column You to select
 $table ==> The table You want to get from Data
 $order ==> the column you want to order by 
 $limit ==> number of records you want to show (Default is 5)
+Why We are using ob_start and ob_flush_end ==> 
+ob ==> output Buffering 
+as starting they store the script in your ram then flush it at the end of the script
+Note: the Smart Editor make the utf8 characters which known as (Byte Order Mark) is invisible
+there is Parameter in the ob_start("ob_gzhandler") ==> Compress Your Page to make it more fast but it is really effective in large Projects
+  

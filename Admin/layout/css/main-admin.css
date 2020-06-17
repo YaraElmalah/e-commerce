@@ -75,6 +75,20 @@ body{
 .latest{
 	margin: 40px;
 }
+.latest .latest-users{
+	margin-bottom: 0
+}
+.latest .latest-users li{
+	padding: 13px 18px 12px 10px;
+	overflow: hidden;
+}
+.latest .latest-users li:nth-child(even){
+	background: #eee;
+}
+.latest .latest-users li .btn{
+	padding: 2px 8px;
+	margin-left: 10px
+}
 /*End Dashboard Page*/
 /*****Start Bootsrap Edits****/
 .navbar{
