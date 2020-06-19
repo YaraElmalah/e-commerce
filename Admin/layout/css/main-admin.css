@@ -90,6 +90,67 @@ body{
 	margin-left: 10px
 }
 /*End Dashboard Page*/
+/*Start Category Page*/
+.categories{
+	padding: 0
+}
+.categories .manage-order a{
+	color: #888;
+	text-decoration: none
+}
+.categories .manage-order a.active{
+	color: #f00;
+	font-weight: bold
+}
+.categories .ordering{
+	margin-right: 6%
+}
+.categories .panel{
+margin-top: 10px;
+}
+.categories .cat{
+	margin: 0 0 10px;
+	padding: 0px 15px;
+	overflow: hidden;
+	position: relative;
+}
+.categories .cat .cat-hidden,
+ .categories .cat .cat-comments{
+	background: #eee;
+	color: #8e7c7c;
+	border-radius: 10px;
+	margin-right: 5px;
+	padding: 5px 10px;
+	font-size: 14px
+}
+.categories .cat .cat-comments{
+	background: #ffeaa7
+}
+.categories .cat .cat-ads{
+	margin-right: 5px;
+	font-size: 14px
+}
+.categories .cat .hidden-buttons{
+	position: absolute;
+	top: 46px;
+	right: -170px;
+	-webkit-transition: all .5s ease-in-out;
+	-moz-transition: all .5s ease-in-out;
+	-o-transition: all .5s ease-in-out;
+	transition: all .5s ease-in-out;
+}
+.categories .cat:hover{
+	background-color: #fab1a024
+}
+.categories .cat:hover .hidden-buttons{
+	right: 10px
+}
+.categories .cat:last-of-type hr{
+	display: none;
+	margin-top: 5px !important;
+	margin-bottom: 5px !important
+}
+/*End Category Page*/
 /*****Start Bootsrap Edits****/
 .navbar{
 	border-radius: 0;
