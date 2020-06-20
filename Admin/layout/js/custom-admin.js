@@ -24,4 +24,15 @@ $(function(){
 	$('.confirm').on('click', function(){
 		return confirm('Are You Sure?');
 	})
+	//Category View Options
+	$('.cat h3').on('click', function(){
+		$(this).next('.full-view').fadeToggle(500);
+	})
+	var myViewOption = $('.full-view');
+	$('.manage-order span').on('click', function(){
+		$(this).addClass('active').siblings('span').removeClass('active');
+		($(this).data('view') === 'full')? myViewOption.fadeIn(200): 
+	     myViewOption.fadeOut(200);
+	 });
+		
 })

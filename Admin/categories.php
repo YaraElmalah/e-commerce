@@ -8,7 +8,6 @@ $pageTitle = 'Categories';
 $orderBy = 'Ordering';
 $sort = 'ASC';
 $sort_array = array('ACS', 'DESC'); //We will depend on it in get request
-$order_array = array('Ordering', 'ID'); //We will depend on it in get request
 if(isset($_SESSION['username'])){  
 	include 'init.php';
 		//Page Content
@@ -21,9 +20,6 @@ $do = isset($_GET['do'])? $_GET['do']: $do = 'Manage';
 		if(isset($_GET['sort']) && in_array($_GET['sort'], $sort_array)){
 			$sort = $_GET['sort'];
 		}	
-		if(isset($_GET['order']) && in_array($_GET['order'], $order_array)){
-			$orderBy = $_GET['order'];
-		}
 
 			$stmt = $connect->prepare("SELECT * FROM categories
 			                           ORDER BY $orderBy $sort");
@@ -39,18 +35,18 @@ $do = isset($_GET['do'])? $_GET['do']: $do = 'Manage';
 
 		    <div class="panel panel-default">
 		    	<div class="panel-heading">
-		    	Manage BuyIT Sections
+		    	<i class="fas fa-tasks"></i> Manage BuyIT Sections
 		    	<div class="manage-order pull-right">
+		    		[
 		    		<a href="?sort=ASC" class="<?php
-		    		 if($_GET['sort'] == 'ASC'): echo 'active'; endif;?>">ASC</a> |
+		    		 if($_GET['sort'] == 'ASC'): echo 'active'; endif;?>"><i class="fas fa-sort-numeric-down"></i> </a> |
 		    		<a href="?sort=DESC" class="<?php
-		    		 if($_GET['sort'] == 'DESC'): echo 'active'; endif;?>">DESC</a>
-		        </div>
-		        <div class="manage-order ordering pull-right">
-		    		<a href="?order=ID" class="<?php
-		    		 if($_GET['order'] == 'ID'): echo 'active'; endif;?>">Date</a> |
-		    		<a href="?order=Ordering" class="<?php
-		    		 if($_GET['order'] == 'Ordering'): echo 'active'; endif;?>">Order-Num</a>
+		    		 if($_GET['sort'] == 'DESC'): echo 'active'; endif;?>"><i class="fas fa-sort-numeric-up"></i>
+		    		</a>
+		    	     ] - [
+		    		<span data-view="classic"><i class="fas fa-bars"></i></span> |
+		    		<span data-view="full" class="active"><i class="far fa-newspaper"></i></span>
+		    		]
 		        </div>
 		        
 		    </div>
@@ -59,6 +55,7 @@ $do = isset($_GET['do'])? $_GET['do']: $do = 'Manage';
 		    			foreach ($cats as $cat) {
 		    			echo "<div class='cat'>";
 		    				echo "<h3> " .  $cat['Name'] . "</h3>";
+		    				echo "<div class='full-view'>";
 		    				echo  "<p>";
 		    				 if(empty($cat['DesBox'])){
 		    				 	echo "This Category has no Description.";
@@ -76,21 +73,23 @@ $do = isset($_GET['do'])? $_GET['do']: $do = 'Manage';
 		    				 	"</span>"; 
 		    				 } 
 		    				 if($cat['Allow_Ads'] == 0){
-		    				 	echo "<span class='cat-ads' title='Adds Off'>" . "
+		    				 	echo "<span class='cat-ads' title='Ads Off'>" . "
 		    				 	<span class=\"fa-stack fa-1x\">
                             <i class=\"fab fa-cloudversify fa-stack-1x\"></i>
                    <i class=\"fas fa-ban fa-stack-2x\" style=\"color:Tomato\"></i>
 </span>" . 
 		    				 	"</span>"; 
 		    				 }
-		    				  //Edit and Delete Buttons (Don't forget to change icons)
 		    				 echo "<div class='hidden-buttons'>";
 		    				 echo "<a href='?do=Edit&catid= ". $cat['ID']  . 
 		    				 "' class='btn  btn-success'><i class=\"fas fa-pen-nib\"></i> Edit</a> ";
-		    				 echo " <a href='#' class='btn  btn-danger confirm'><i class=\"fas fa-trash\"></i> Delete</a>";
+		    				 echo " <a href='?do=Delete&catid=". $cat['ID'] . " ' class='btn  btn-danger confirm'><i class=\"fas fa-trash\"></i> Delete</a>";
 		    				 echo "</div>"; 
 		    			     echo "</div>";
-		    				 echo "<hr>";
+
+		    			     echo "</div>";
+		    			      echo "<hr>";
+		    			
 		    				
 		    			}
 		    		?>
@@ -374,7 +373,7 @@ $do = isset($_GET['do'])? $_GET['do']: $do = 'Manage';
 					<label class="col-sm-2 control-label"> 
 				</label>
 					<div class="col-sm-10 col-md-6">
-						<input type="submit" value="Add Gategory" class="btn btn-primary btn-lg">
+						<input type="submit" value="Edit Gategory" class="btn btn-primary btn-lg">
 					</div>
 				</div>
 				<!--End Submit-->
@@ -389,9 +388,78 @@ $do = isset($_GET['do'])? $_GET['do']: $do = 'Manage';
 	
        
 	} elseif ($do == 'Update'){
-		# code...
-	} elseif($do == 'Delete'){
-		#code..
+		if($_SERVER['REQUEST_METHOD'] === "POST"){
+		echo "<h1 class='text-center'>Update Category</h1>"; 
+		//Get Variables From the Form
+		$catid    = $_POST['id'];
+		$name     = $_POST['name'];
+		$desc     = $_POST['desc'];
+		$order    = $_POST['order'];
+		$visible  = $_POST['visibility'];
+		$Comments = $_POST['comment'];
+		$ads      = $_POST['ads'];
+			//Database Query
+
+			//Check if There is no errors 
+			if(!empty($name)){
+				$check = checkItem('Name','categories', $name);
+	            if($check == 1){
+		             $error =  "<div class='container'>
+		                        <div class='alert alert-danger'>This Name already existed</div>";
+		             redirectHome($error, 'back');
+		         } else{
+		         	//Update Database with this info
+			     $stmt = $connect->prepare("UPDATE categories 
+				SET Name = ? , DesBox = ? ,  Ordering = ? , Visible = ? , Allow_Comment = ? , Allow_Ads = ?  where ID = ?");
+		     	$stmt->execute(array($name, $desc, $order, $visible , $Comments , $ads, $catid));
+		     	//Echo Success Message
+		     	$success =  " <div class='container'>
+		     	              <div class='alert alert-success'>" .  $stmt->rowCount() . " Record Updated </div>";
+		     	redirectHome($success, 'back');
+		         }
+		    
+			} else{
+			   $error = " <div class='container'>
+			   				<div class='alert alert-danger'>
+			         The Name of The Category Can't be Empty
+			         </div>";
+			   redirectHome($error, 'back');
+			}
+			
+		
+	
+	} else{
+		header('location: categories.php?sort=ASC');
+	}
+	} elseif($do == 'Delete'){ //Delete Page ?>
+
+			   <div class="container">
+				<h1 class="text-center">Delete Category</h1>
+			
+ <?php
+		$catid = isset($_GET['catid']) 
+		&& is_numeric($_GET['catid'])? 
+		intval($_GET['catid']): 0; //That is our Category that we would deal with
+		//Now We get the Record from database
+		$check = checkItem( 'ID' , 'categories', $catid);
+		//if We have a record then it must be > 0
+		if($check > 0){ // User Existed
+			//Delete Query
+				$stmt = $connect->prepare("DELETE FROM categories WHERE
+					                       ID = :catid");
+				$stmt->bindParam(":catid" , $catid);
+				$stmt->execute();
+				//Echo Success Message
+			 $success =  "<div class='container'>
+			                <div class='alert alert-success'>" .  $stmt->rowCount() . " Record Deleted </div> </div>";
+			 redirectHome($success, 'back');
+		} else{
+			$error = " <div class='container'>
+			               <div class='alert alert-danger'>There is No Such Category</div> 
+			            ";
+			redirectHome($error, 'back');
+		}
+
 	}
 	else{
 	$error = " 
