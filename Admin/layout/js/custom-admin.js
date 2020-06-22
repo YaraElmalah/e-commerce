@@ -1,5 +1,9 @@
 $(function(){
 	'use strict';
+	//Trigger The SelectBoxIt
+	$('select').selectBoxIt({
+		  autoWidth: false
+	});
 	//Remove Placeholder on Focus
 	$('[placeholder]').focus(function(){
 		$(this).attr('data-text', $(this).attr('placeholder'));
