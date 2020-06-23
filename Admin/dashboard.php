@@ -7,6 +7,7 @@ $pageTitle = "Dashboard";
 include 'init.php';
 $order = 10;
 $LatestMembers =  getLatest('*', '`shop-users`', 'UserID', $order);
+$LatestItems   =  getLatest('*', 'items', 'itemID', $order);
 /*Start Dashboard Page*/
 ?>
 	<!--Start Statistics of the Web-->
@@ -37,8 +38,10 @@ $LatestMembers =  getLatest('*', '`shop-users`', 'UserID', $order);
 				</div>
 				<div class="col-sm-3">
 					<div class="stat st-items">
+						<a href="items.php?do=Manage">
 						<h3 class="text-capitalize">total items</h3>
-						<span>1500</span>
+						<span><?php echo countAndSelect('itemID', 'items')?> </span>
+					</a>
 					</div>
 				</div>
 				<div class="col-sm-3">
@@ -89,10 +92,22 @@ $LatestMembers =  getLatest('*', '`shop-users`', 'UserID', $order);
 					<div class="panel panel-default">
 						<div class="panel-heading text-capitalize">
 							<i class="fas fa-shopping-bag"></i>
-							latest items
+							 latest <?php echo $order; ?> added items 
 						</div>
 						<div class="panel-body">
-							Test
+							<ul class="list-unstyled latest-users">
+							<?php 
+							foreach ($LatestItems as $item) {
+								echo "<li>" .  $item['Name'];
+								echo "<a href='items.php?do=Edit&itemid=" . 
+						 $item['itemID'] .  "' class='btn btn-success pull-right'> <i class=\"fas fa-edit\"></i> Edit</a>  " . 
+					"<a href='items.php?do=Delete&itemid=" . $item['itemID'] . "' class='btn btn-danger confirm pull-right'> <i class=\"fas fa-trash-alt\"></i> Delete</a>"; 
+						echo "</li>";
+						
+
+							}
+							 ?> 
+							</ul>
 						</div>
 					</div>	
 				</div>
