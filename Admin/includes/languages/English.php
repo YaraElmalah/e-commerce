@@ -9,7 +9,8 @@ function lang($phrase){
 		'settings'         => 'Settings',
 		'items'            => 'Items',
 		'members'          => 'Members',
-		'statistics'       => 'Statistics',
+		'comments'         => 'Comments',
+	 	'statistics'       => 'Statistics',
 		'logs'             => 'Logs'
 	);
 	return $English[$phrase];

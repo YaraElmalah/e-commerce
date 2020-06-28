@@ -17,6 +17,26 @@ body{
 	top: 10px;
     right: 46px;
 }
+textarea.form-control{
+	resize: none;
+	height: 125px;
+    border: 1px solid #22222270;
+    -webkit-box-shadow: 0 3px 10px #ccc;
+    -moz-box-shadow: 0 3px 10px #ccc;
+    -o-box-shadow: 0 3px 10px #ccc;
+    box-shadow: 0 3px 10px #ccc;
+    
+}
+.empty-message{
+	padding: 10px;
+	background: #fff;
+	margin: 10px 0;
+	border-left: 5px solid green;
+    font-family: Raleway;
+    font-size: 30px;
+    font-weight: bold;
+    font-style: italic;
+}
 /*End Rules*/
 
 /*Start Login Form*/
@@ -47,13 +67,23 @@ body{
 	border: 1px solid #CCC;
 	padding: 20px;
 	font-size: 15px;
-	border-radius: 10px
+	border-radius: 10px;
+	overflow: hidden;
 }
 .home-stats .stat a{
-	color: #fff
+	color: #fff;
+	position: relative;
 }
 .home-stats .stat a:hover{
 	text-decoration: none
+}
+.home-stats i{
+    font-size: 70px;
+    position: absolute;
+     top: 55px;
+    right: 26px;
+
+
 }
 .home-stats .st-members{
 	background-color: #eb4d4b
@@ -67,27 +97,78 @@ body{
 .home-stats .st-comments{
 	background-color: #22a6b3
 }
+.home-stats .stat h3{
+	    color: #fdcb6e;
+    font-family: Lobster; 
+    margin-top: 7px;
 
+}
 .home-stats .stat span{
 	display: block;
-	font-size: 50px
+	font-size: 50px;
+	color: #2d3436;
+    font-family: Lobster;
+    padding-right: 17%
 }
 .latest{
 	margin: 40px;
 }
-.latest .latest-users{
+.latest .toggle-show{
+	cursor: pointer;
+}
+.latest .toggle-show:hover{
+color: #F00
+}
+.latest .latest-data{
 	margin-bottom: 0
 }
-.latest .latest-users li{
+.latest .latest-data li{
 	padding: 13px 18px 12px 10px;
 	overflow: hidden;
 }
-.latest .latest-users li:nth-child(even){
+.latest .latest-data li:nth-child(even){
 	background: #eee;
 }
-.latest .latest-users li .btn{
+.latest .latest-data li .btn{
 	padding: 2px 8px;
 	margin-left: 10px
+}
+.latest .comment-box{
+	margin: 5px 0 10px;
+	overflow: hidden
+}
+.latest .comment-box .comment-n{
+	float: left;
+	position: relative;
+	margin-right: 20px;
+	width: 80px;
+	text-align: center;
+	top: 9px;
+}
+.latest .comment-box .comment-c{
+	width: calc(100% - 100px);
+	background-color: #EEE;
+	padding: 10px;
+	position: relative;
+	float: right;
+	font-style: italic;
+
+}
+.latest .comment-box .comment-c:before{
+	content: "";
+	display: block;
+	position: absolute;
+	left: 0;
+	border-style: solid;
+	border-color: transparent #EEE transparent transparent;
+	height: 0;
+	width: 0;
+	border-width: 15px;
+	top: 5px;
+	left: -29px
+}
+.latest .comment-box .comment-c .btn{
+	font-style: normal
 }
 /*End Dashboard Page*/
 /*Start Category Page*/

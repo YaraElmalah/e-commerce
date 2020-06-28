@@ -20,7 +20,17 @@ if($do == 'Manage'){ //Manage Page
 	} else{
 		$query = "";
 	}
+	//We can add to the querry (WHERE groupID != 1 as no the the Admin included)
+					$stmt = $connect->prepare("
+						SELECT * FROM `shop-users`  
+						WHERE groupID != 1 $query
+						ORDER BY UserID DESC");
+					$stmt-> execute(); //Execute the Statement
+					//Assign To a Variable
+					$rows = $stmt-> FetchAll(); //get All members
+						if(!empty($rows)){
 	?>
+
 	<div class="container">
 		<h1 class="text-center">Manage Members</h1>
 	<a href='members.php?do=Add' class="btn btn-primary">
@@ -36,13 +46,6 @@ if($do == 'Manage'){ //Manage Page
 				<th class="text-capitalize">control</th>
 			</tr>
 				<?php 
-			//We can add to the querry (WHERE groupID != 1 as no the the Admin included)
-					$stmt = $connect->prepare("
-						SELECT * FROM `shop-users`  
-						WHERE groupID != 1 $query");
-					$stmt-> execute(); //Execute the Statement
-					//Assign To a Variable
-					$rows = $stmt-> FetchAll(); //get All members
 					foreach ($rows as $row) {
 						 echo "<tr>";
 						 echo "<td>" . $row['UserID'] . "</td>";
@@ -61,10 +64,14 @@ if($do == 'Manage'){ //Manage Page
 
 						 echo "</tr>";
 					}
+
 			?>
 			
 		</table>
 	</div>
+<?php } else{
+		echo "<div class='empty-message'> There is no Pending Members </div>";
+} ?>
      </div>
 <?php } elseif($do == 'Add'){ //Add Member Page?>
 
@@ -202,7 +209,7 @@ if($do == 'Manage'){ //Manage Page
 						<input type="submit" value="save" class="btn btn-primary btn-lg">
 					</div>
 				</div>
-				<!--End FullName-->
+				<!--End Submit-->
 				
 			</div>
 		</form>
@@ -245,7 +252,11 @@ elseif ($do == "Update") {
 			//Database Query
 			//Check if There is no errors 
 			if(empty($formErrors)){
-				$check = checkItem('username','`shop-users`', $username);
+               $myCheck = $connect->prepare("SELECT * FROM `shop-users`
+               	WHERE username = ? AND UserID != ?");
+               $myCheck->execute(array($username, $id));
+               $myCheck->fetch();
+               $check = $myCheck->rowCount();
 	            if($check == 1){
 		             $error =  "<div class='container'>
 		                        <div class='alert alert-danger'>The username is already existed</div>";
@@ -267,6 +278,8 @@ elseif ($do == "Update") {
 				echo "<div class='alert alert-danger'>"  . 
 				$error . "</div>";
 			}
+			$myError = "<div class='alert alert-success'>Please Refill The Form</div>";
+			redirectHome($myError, 'back');
 			}
 			
 		

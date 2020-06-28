@@ -5,6 +5,7 @@
 ob_start(); //Output Buffering Start
 session_start();
 $pageTitle = 'Items';
+$noID = "<div class='alert alert-danger>'There is no Such ID</div";
 if(isset($_SESSION['username'])){  
 	include 'init.php';
 		//Page Content
@@ -13,12 +14,36 @@ $do = isset($_GET['do'])? $_GET['do']: $do = 'Manage';
 //Assign do;
 //Create Our Page Depends on the $_GET
 	if($do == 'Manage'){ //Manage Page
+		if(isset($_GET['page'])){
+		$query = "AND Approve = 0";
+		} else{
+			$query = "";
+		}
+		$stmt = $connect->prepare("SELECT items.*, 
+						  categories.Name
+						   AS catName,
+						 `shop-users`.username 
+						  AS seller
+						  FROM items 
+						  inner join categories 
+						  ON 
+						  categories.ID = CatID
+						  inner join `shop-users` 
+						  ON 
+						  `shop-users`.UserID = MemberID $query
+						  	ORDER BY itemID DESC");
+					$stmt-> execute(); //Execute the Statement
+					//Assign To a Variable
+					$items = $stmt-> FetchAll(); //get All members
 	 ?>
 		<div class="categories">
 	     <div class="container">
 			<h1 class="text-center">Manage Items</h1>
 		    <a href='items.php?do=Add' class="btn btn-primary">
 		    <i class="fas fa-folder-plus"></i> New Item</a>
+		    <?php 
+		    	if(!empty($items)){
+		    ?>
 		    <div class="table-responsive">
 		<table class="table table-bordered text-center main-table">
 			<tr>
@@ -32,21 +57,6 @@ $do = isset($_GET['do'])? $_GET['do']: $do = 'Manage';
 				<th class="text-capitalize">control</th>
 			</tr>
 				<?php 
-					$stmt = $connect->prepare("SELECT items.*, 
-						  categories.Name
-						   AS catName,
-						 `shop-users`.username 
-						  AS seller
-						  FROM items 
-						  inner join categories 
-						  ON 
-						  categories.ID = CatID
-						  inner join `shop-users` 
-						  ON 
-						  `shop-users`.UserID = MemberID");
-					$stmt-> execute(); //Execute the Statement
-					//Assign To a Variable
-					$items = $stmt-> FetchAll(); //get All members
 					foreach ($items as $item) {
 						 echo "<tr>";
 						 echo "<td>" . $item['itemID'] . "</td>";
@@ -56,9 +66,17 @@ $do = isset($_GET['do'])? $_GET['do']: $do = 'Manage';
 						 echo "<td>" . $item['Date'] . "</td>";
 						 echo "<td>" . $item['catName'] . "</td>";
 						 echo "<td>" . $item['seller'] . "</td>";
-						 echo "<td>" . "<a href='items.php?do=Edit&itemid=" . 
+						 echo "<td>";
+						  if($item['Approve'] == 0){
+						echo " <a href='items.php?do=Approve&itemid=" .
+						 $item['itemID'] . " ' class='btn btn-info activate'>
+						  <i class=\"fas fa-clipboard-check\"></i> Approve </a> 
+						  <br>";
+
+						} 
+						 echo "<a href='items.php?do=Edit&itemid=" . 
 						 $item['itemID'] .  "' class='btn btn-success'> <i class=\"fas fa-edit\"></i> Edit</a> " . 
-					"<a href='members.php?do=Delete&itemid=" . $item['itemID'] . "' class='btn btn-danger confirm'> <i class=\"fas fa-trash-alt\"></i> Delete</a>"; 
+					"<a href='items.php?do=Delete&itemid=" . $item['itemID'] . "' class='btn btn-danger confirm'> <i class=\"fas fa-trash-alt\"></i> Delete</a>";
 
 						 echo "</tr>";
 					}
@@ -66,6 +84,10 @@ $do = isset($_GET['do'])? $_GET['do']: $do = 'Manage';
 			
 		</table>
 		 </div>
+		<?php  } else{
+
+			echo "<div class='empty-message'>There is no Items</div>";
+		}?>
 	    </div>
 
 		    <?php
@@ -262,9 +284,7 @@ $do = isset($_GET['do'])? $_GET['do']: $do = 'Manage';
 		
 
       } else{
-      	$error = " <div class='container'>
-      	            <div class='alert alert-danger'>You are not Allowed to browse this Page</div>
-      	            ";
+      	$error = " <div class='container'>" . $noID;
 		redirectHome($error, 3);
 	}
 	} elseif ($do == 'Edit'){
@@ -412,9 +432,63 @@ $do = isset($_GET['do'])? $_GET['do']: $do = 'Manage';
 				
 			</div>
 		</form>
+		<!--Start Comments of the Item-->
+		<?php 
+				$stmt = $connect->prepare("
+						SELECT comments.*, 
+						`shop-users`.username AS user
+						FROM comments
+						INNER JOIN `shop-users`
+						   ON `shop-users`.UserID = comments.UserID
+						   	WHERE itemID = ?
+						");
+					$stmt-> execute(array($itemid)); //Execute the Statement
+					//Assign To a Variable
+					$comments = $stmt-> FetchAll(); //get All comments
+					if(!empty($comments)){
+
+
+		?>
+		<h1 class="text-center">Manage [<?php echo $items['Name'] ?>] Comments</h1>
+	<div class="table-responsive">
+		<table class="table table-bordered text-center main-table">
+			<tr>
+				
+				<th class="text-capitalize">comment</th>
+				<th class="text-capitalize">added date</th>
+				<th class="text-capitalize">user</th>
+				<th class="text-capitalize">control</th>
+			</tr>
+				<?php 
+					
+					foreach ($comments as $comment) {
+						 echo "<tr>";
+						 echo "<td>" . $comment['comment'] . "</td>";
+						 echo "<td>" . $comment['added_Date'] . "</td>";
+						 echo "<td>" . $comment['user'] . "</td>";
+						 echo "<td>" . "<a href='comments.php?do=Edit&comid=" . 
+						 $comment['c_id'] .  "' class='btn btn-success'> <i class=\"fas fa-pencil-alt\"></i> Edit</a> " . 
+					"<a href='comments.php?do=Delete&comid=" . $comment['c_id'] . "' class='btn btn-danger confirm'> <i class=\"fas fa-ban\"></i> Delete</a>"; 
+						if($comment['status'] == 0){
+
+						echo " <a href='comments.php?do=Approve&comid=" . $comment['c_id'] . " ' class='btn btn-info activate'><i class=\"fa fa-check\"></i> Approve </a>";
+
+						}
+
+						 echo "</tr>";
+					}
+			?>
+			
+		</table>
+	</div>
+		<!--End Comments of the Item-->
 	</div>
 
+
 				 <?php
+				} else {
+					echo "<div class='empty-message'>This item has no comments</div>";
+				}
 				} else{
 					$errorMsg =  "Wrong There is no such user";
 			        redirectHome($errorMsg);
@@ -482,9 +556,62 @@ $do = isset($_GET['do'])? $_GET['do']: $do = 'Manage';
 		}
 	
 	} elseif($do == 'Delete'){
-		#code..
+		//Delete Page ?>
+
+			   <div class="container">
+				<h1 class="text-center">Delete Item</h1>
+			
+ <?php
+		$itemid = isset($_GET['itemid']) 
+		&& is_numeric($_GET['itemid'])? 
+		intval($_GET['itemid']): 0; //That is our user that we would deal with
+		//Now We get the Record from database
+		$check = checkItem( 'itemID' , 'items', $itemid);
+		//if We have a record then it must be > 0
+		if($check > 0){ // User Existed
+			//Delete Query
+				$stmt = $connect->prepare("DELETE FROM items WHERE
+					                       itemID = :item");
+				$stmt->bindParam(":item" , $itemid);
+				$stmt->execute();
+				//Echo Success Message
+			 $success =  "<div class='container'>
+			                <div class='alert alert-success'>" .  $stmt->rowCount() . " Record Deleted </div> </div>";
+			 redirectHome($success, 'back');
+		} else{
+			$error = " <div class='container'>
+			               <div class='alert alert-danger'>There is No Such Item</div> 
+			            ";
+			redirectHome($error, 'back');
+		}
 	}elseif($do == 'Approve'){
-		#code
+		//Activate Page ?>
+	          <div class="container">
+				<h1 class="text-center">Approve Item</h1>
+			
+ <?php
+		$itemid = isset($_GET['itemid']) 
+		&& is_numeric($_GET['itemid'])? 
+		intval($_GET['itemid']): 0; //That is our item that we would deal with
+		//Now We get the Record from database
+		$check = checkItem( 'itemID' , 'items', $itemid);
+		//if We have a record then it must be > 0
+		if($check > 0){ // User Existed
+			//Delete Query
+				$stmt = $connect->prepare("	UPDATE items SET Approve = 1 WHERE  itemID = :item");
+				$stmt->bindParam(":item" , $itemid);
+				$stmt->execute();
+				//Echo Success Message
+			 $success =  "<div class='container'>
+			                <div class='alert alert-success'>" .  $stmt->rowCount() . " Record Approved </div> </div>";
+			 redirectHome($success, 'back');
+		} else{
+			$error = " <div class='container'>
+			               <div class='alert alert-danger'>There is No Such Item</div> 
+			            ";
+			redirectHome($error, 'back');
+		}
+	
 	}
 	else{
 	$error = " 

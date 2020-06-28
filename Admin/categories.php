@@ -32,7 +32,9 @@ $do = isset($_GET['do'])? $_GET['do']: $do = 'Manage';
 			<h1 class="text-center">Manage Categories</h1>
 		    <a href='categories.php?do=Add' class="btn btn-primary">
 		    <i class="fas fa-cart-plus fa-lg"></i> New Category</a>
-
+		    	<?php 
+		    		if(!empty($cats)){
+		    	?>
 		    <div class="panel panel-default">
 		    	<div class="panel-heading">
 		    	<i class="fas fa-tasks"></i> Manage BuyIT Sections
@@ -95,6 +97,9 @@ $do = isset($_GET['do'])? $_GET['do']: $do = 'Manage';
 		    		?>
 		    	</div>
 		    </div>
+		<?php } else{
+			echo "<div class='empty-message'> There is no Categories </div>";
+		}?>
 		</div>
 	</div>
 	<?php
@@ -373,7 +378,7 @@ $do = isset($_GET['do'])? $_GET['do']: $do = 'Manage';
 					<label class="col-sm-2 control-label"> 
 				</label>
 					<div class="col-sm-10 col-md-6">
-						<input type="submit" value="Edit Gategory" class="btn btn-primary btn-lg">
+						<input type="submit" value="Save Gategory" class="btn btn-primary btn-lg">
 					</div>
 				</div>
 				<!--End Submit-->
@@ -402,7 +407,10 @@ $do = isset($_GET['do'])? $_GET['do']: $do = 'Manage';
 
 			//Check if There is no errors 
 			if(!empty($name)){
-				$check = checkItem('Name','categories', $name);
+			 $myCheck = $connect->prepare("SELECT * FROM categories
+               	WHERE ID != ? ");
+               $myCheck->execute(array($catid));
+               $check = $myCheck->fetch();
 	            if($check == 1){
 		             $error =  "<div class='container'>
 		                        <div class='alert alert-danger'>This Name already existed</div>";

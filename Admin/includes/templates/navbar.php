@@ -17,8 +17,7 @@
         <li><a href="categories.php?sort=ASC"><?php echo lang('sections') ?><span class="sr-only">(current)</span></a></li>
        <li><a href="items.php"><?php echo lang('items') ?><span class="sr-only">(current)</span></a></li>
         <li><a href="members.php"><?php echo lang('members') ?><span class="sr-only">(current)</span></a></li>
-        <li><a href="#"><?php echo lang('statistics') ?><span class="sr-only">(current)</span></a></li>
-        <li><a href="#"><?php echo lang('logs') ?><span class="sr-only">(current)</span></a></li>
+        <li><a href="comments.php"><?php echo lang('comments') ?><span class="sr-only">(current)</span></a></li>
               </ul>
       <ul class="nav navbar-nav navbar-right">
         <li class="dropdown">
