@@ -24,6 +24,7 @@
           <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false"><?php echo $_SESSION['username'] ?><span class="caret"></span></a>
           <ul class="dropdown-menu">
             <li><a href="members.php?do=Edit&userid=<?php echo $_SESSION['id']; ?>"><?php echo lang('edit-profile') ?></a></li>
+            <li><a href="../index.php"><?php echo lang('shop') ?></a></li>
             <li><a href="#"><?php echo lang('settings') ?></a></li>
             <li role="separator" class="divider"></li>
             <li><a href="logout.php">logout</a></li>

@@ -6,7 +6,6 @@ function lang($phrase){
 		'brand'            => 'Buy IT',
 		'sections'         => 'Categories',
 		'edit-profile'     => 'Edit Profile',
-		'shop'             => 'Visit Shop',
 		'settings'         => 'Settings',
 		'items'            => 'Items',
 		'members'          => 'Members',

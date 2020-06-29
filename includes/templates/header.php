@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8" />
+  <!--Start Css Files-->
+  <link rel="stylesheet" href= "<?php echo $cssAdmin ?>bootstrap-min.css" />
+  <link rel="stylesheet" href= "<?php echo $cssAdmin ?>icons.min.css" />
+  <link rel="stylesheet" href= "<?php echo $cssAdmin ?>jquery.selectBoxIt.css" />
+  <link rel="stylesheet" href= "<?php echo $cssAdmin ?>main-front.css" />
+   <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Lobster&display=swap">
+   <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Balsamiq+Sans&display=swap" >
+  <title><?php echo "BuyIt" ?></title>
+</head>
+<body>
+  <!--Upper Navbar-->
+  <div class="upper-bar">
+    <div class="container">
+      <span class="pull-right text-capitalize"><a href='login.php'>don't miss a hit ! login or signup now</a></span>
+    </div>
+  </div>
+	<!--Start Navbar-->
+	<nav class="navbar navbar-inverse">
+  <div class="container">
+    <div class="navbar-header">
+      <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#nav-toggle" aria-expanded="false">
+        <span class="sr-only">Toggle navigation</span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+      <a class="navbar-brand" href="index.php"><?php echo lang('brand') ?></a>
+    </div>
+
+    <!-- Collect the nav links, forms, and other content for toggling -->
+    <div class="collapse navbar-collapse" id="nav-toggle">
+      <ul class="nav navbar-nav navbar-right">
+            <?php 
+                foreach (getCats() as $cat) {
+                  echo "<li><a href='categories.php?pageid=" . $cat['ID'] . '&pagename='. str_replace(' ', '-', $cat['Name']) . "'>" 
+                  . $cat['Name'] . "</a></li>";
+                }
+            ?>
+              </ul>
+    </div>
+  </div>
+</nav>
+<!--End Navbar-->
