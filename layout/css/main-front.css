@@ -44,11 +44,25 @@ textarea.form-control{
 	margin-bottom: 20px;
     font-size: 65px;
 }
+.welcome-message{
+	color: #9d9d9d;
+    font-family: lobster;
+    font-size: 20px;
+}
 /*End Rules*/
 /*Start Upper Navbar*/
 .upper-bar{
 	padding: 10px;
-	background: #332f2f
+	background: #332f2f;
+}
+.upper-bar span{
+	margin-left: 15px
+}
+.upper-bar a{
+color: #fff;
+}
+.upper-bar a:hover{
+text-decoration: none
 }
 /*End Upper Navbar*/
 /*Start Login Form*/

@@ -1,5 +1,17 @@
-<?php include 'init.php'; ?>
-	
+<?php 
+ob_start();
+include 'init.php'; 
+$flag = false;
+foreach (getCats() as $cat => $catvalue) {
+	if(in_array(str_replace('-', ' ' , $_GET['pagename']), $catvalue)){
+		$flag = true; //To make sure that you enter the correct page without error pages displayed
+	}
+}
+
+ 	//print_r(getCats());
+	if(isset($_GET['pagename']) && $flag == true){ 
+
+		?>
 	<section class="category">
 		<div class="container">
 			<h1 class="text-center"><?php echo str_replace('-', ' ' , $_GET['pagename']); ?></h1>
@@ -30,4 +42,9 @@
 		</div>
 	</section>
 
-<?php include $templates . 'footer.php'; ?>
+<?php   } else{
+	header('location: index.php');
+}
+include $templates . 'footer.php';
+ob_end_flush();
+?>

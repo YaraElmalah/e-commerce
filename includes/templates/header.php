@@ -3,7 +3,8 @@
 <head>
   <meta charset="utf-8" />
   <!--Start Css Files-->
-  <link rel="stylesheet" href= "<?php echo $cssAdmin ?>bootstrap-min.css" />
+  <link rel="stylesheet" 
+  href= "<?php echo $cssAdmin ?>bootstrap-min.css" />
   <link rel="stylesheet" href= "<?php echo $cssAdmin ?>icons.min.css" />
   <link rel="stylesheet" href= "<?php echo $cssAdmin ?>jquery.selectBoxIt.css" />
   <link rel="stylesheet" href= "<?php echo $cssAdmin ?>main-front.css" />
@@ -15,7 +16,22 @@
   <!--Upper Navbar-->
   <div class="upper-bar">
     <div class="container">
-      <span class="pull-right text-capitalize"><a href='login.php'>don't miss a hit ! login or signup now</a></span>
+      <?php 
+      session_start();
+        if (isset($_SESSION['user'])){
+          echo "<span class='welcome-message'> Welcome back, " . $_SESSION['user'] . " .. <i class=\"fab fa-pagelines\"></i> </span>";
+          echo "<span class='btn btn-primary text-capitalize'><a href='profile.php'>my profile</a> </span>";
+          echo "<span class='btn btn-danger text-capitalize'><a href='logout.php'>logout</a> </span>";
+          
+            if(checkUserStatus($_SESSION['user']) == 0 ){
+              echo "  <span class='pull-right text-primary'> Please Wait for Admin Activation, thanks for your Patience <i class=\"far fa-laugh-beam\"></i> </span>";
+          }
+        } else{
+
+            echo "<span class=\"pull-right text-capitalize text-primary\"><a href='login.php'>don't miss a hit ! login or signup now</a></span>";
+        }
+      ?>
+      
     </div>
   </div>
 	<!--Start Navbar-->
