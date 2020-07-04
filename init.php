@@ -2,10 +2,6 @@
     //Error Reporting
     ini_set('display_errors' , 'On');
     error_reporting(E_ALL);
-    $sessionUser  = '';
-    if(isset($_SESSION['user'])){
-        $sessionUser = $_SESSION['user'];
-    }
     //Routes
     $templates = 'includes/templates/';
     $cssAdmin = 'layout/css/';
@@ -17,4 +13,8 @@
     include $translate . 'English.php'; //first Thing to include
     include $func      . 'functions.php';
     include $templates . 'header.php';
+    $sessionUser  = '';
+    if(isset($_SESSION['user'])){
+        $sessionUser = $_SESSION['user'];
+    }
     ?>

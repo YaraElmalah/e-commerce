@@ -18,7 +18,7 @@ foreach (getCats() as $cat => $catvalue) {
 			<div class="row">
 				
 				<?php 
-				$CatItems = getItems($_GET['pageid']);
+				$CatItems = getItems($_GET['pageid'] , 'CatID');
 				   if(! empty($CatItems)){
 					foreach ($CatItems as $item) {
 						echo "<div class='col-sm-6 col-md-3'>";
@@ -44,6 +44,7 @@ foreach (getCats() as $cat => $catvalue) {
 
 <?php   } else{
 	header('location: index.php');
+	exit();
 }
 include $templates . 'footer.php';
 ob_end_flush();

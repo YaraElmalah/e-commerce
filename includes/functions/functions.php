@@ -15,12 +15,12 @@ function getCats(){
 /*
 get Items from the Database
 */
-function getItems($item){
+function getItems($value , $where){
 	global $connect;
-	$stmt = $connect->prepare("SELECT * FROM items WHERE CatID = ?
+	$stmt = $connect->prepare("SELECT * FROM items WHERE $where = ?
 		                          ORDER BY Date DESC
 		                           ");
-	$stmt->execute(array($item));
+	$stmt->execute(array($value));
 	$items = $stmt->fetchAll();
 	return $items;
 }

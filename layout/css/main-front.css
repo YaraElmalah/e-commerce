@@ -100,6 +100,24 @@ color: #5cb85c
 
 }
 /*End Categories Page*/
+/*Start Profile Page*/
+.profile-c{
+	position: relative;
+    background: #EEE;
+    padding: 21px 5px;
+    border-radius: 10px;
+    font-style: italic;
+    width: 100%
+}
+.profile-c span{
+    position: absolute;
+    top: 39px;
+    font-weight: bold;
+    font-family: Raleway;
+    left: 160px;
+    margin-top: 5px;
+}
+/*End Profile Page*/
 
 /*****Start Bootsrap Edits****/
 .navbar{
