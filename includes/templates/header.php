@@ -10,7 +10,7 @@
   <link rel="stylesheet" href= "<?php echo $cssAdmin ?>main-front.css" />
    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Lobster&display=swap">
    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Balsamiq+Sans&display=swap" >
-  <title><?php echo "BuyIt" ?></title>
+  <title><?php  getTitle(); ?></title>
 </head>
 <body>
   <!--Upper Navbar-->
@@ -21,6 +21,8 @@
         if (isset($_SESSION['user'])){
           echo "<span class='welcome-message'> Welcome back, " . $_SESSION['user'] . " .. <i class=\"fab fa-pagelines\"></i> </span>";
           echo "<span class='btn btn-primary text-capitalize'><a href='profile.php'>my profile</a> </span>";
+          echo "<span class='btn btn-info text-capitalize'><a href='additem.php'>
+                <i class=\"fas fa-folder-plus\"></i> New Ad</a> </span>";
           echo "<span class='btn btn-danger text-capitalize'><a href='logout.php'>logout</a> </span>";
           
             if(checkUserStatus($_SESSION['user']) == 0 ){

@@ -1,4 +1,34 @@
 <?php 
+//getTitle Page V1.0
+/*
+Get Title of the page
+*/
+function getTitle(){
+	global $pageTitle;
+	if(isset($pageTitle)){
+	 echo $pageTitle . " - " . 'BuyIt';
+	} else{ 
+		echo 'BuyIt';
+	}
+}
+//Check Item FunctionV1.0
+/*
+Function to check item if it exists in Database
+[Function accepts Parameters] ==> 
+$select -> the item to Select [example: user, item, category]
+$from   -> the table to Select from [example: users, items, categories]
+$value  -> the value of Select[example: Yara, Laptop, Electronics]
+Note: We make any Variable defined outside the function global to can access it
+if You Want to check from an specific column write $select = $value
+*/
+function checkItem($select, $from, $value){
+	global $connect; 
+	$query = $connect->prepare("SELECT $select FROM $from 
+		                         WHERE $select = ?");
+	$query->execute(array($value));
+	$count = $query-> rowCount();
+	return $count;
+}
 //getCats V1.0
 /*
 get Categories from the Database

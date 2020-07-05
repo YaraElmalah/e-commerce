@@ -1,9 +1,9 @@
 <?php 
+  include 'init.php';
 ob_start();
-  if(isset($_SESSION['user'])){
+ if(isset($_SESSION['user'])){
   	header('location: index.php');
  }
-  include 'init.php';
   	//Check if The User Coming from HTTP POST Method
   	if($_SERVER['REQUEST_METHOD'] == 'POST'){
   		if(isset($_POST['login'])){
@@ -28,34 +28,58 @@ ob_start();
   			header('location: index.php');
   			exit(); //Stop the Script 
   		}
-  	} else{
-  		$formErrors = array();
-  		if(isset($_POST['username'])){
-  			$filteredUsername = filter_var($_POST['username'], FILTER_SANITIZE_STRING);
+  	} else{ //here signup form POST
+  		$username      = $_POST['username'];
+  		$password      = $_POST['password'];
+  		$confirmPass   = $_POST['con-password'];
+  		$email         = $_POST['email'];
+  		$formErrors    = array();
+  		if(isset($username)){
+  			$filteredUsername = filter_var($username, FILTER_SANITIZE_STRING);
   			if(strlen($filteredUsername) < 4){
   				$formErrors[] = "The username can't be less than 4 characters";
   			}
   		}
-  		if(isset($_POST['password'])){
-  			if(empty($_POST['password'])){
+  		if(isset($password) && isset($confirmPass)){
+  			if(empty($password)){
   				$formErrors[] = "The Password can't be empty";
   			}
-  			$pass1 = sha1($_POST['password']);
-  			$pass2 = sha1($_POST['con-password']);
+  			$pass1 = sha1($password);
+  			$pass2 = sha1($confirmPass);
   			if($pass1 !== $pass2){
   				$formErrors[] = "The Two Passwords are not identical";
   			}
   		}
-  		if(isset($_POST['email'])){
-  			$filteredEmail = filter_var($_POST['email'] , FILTER_SANITIZE_EMAIL);
+  		if(isset($email)){
+  			$filteredEmail = filter_var($email, FILTER_SANITIZE_EMAIL);
   			if(filter_var($filteredEmail , FILTER_VALIDATE_EMAIL) 
   				!= true ){
   				$formErrors[] = "Enter a valid Email";
   			}
   		}
-  	}
-  }
-
+  		//Database Query
+			//Check if There is no errors 
+			if(empty($formErrors)){
+				$check = checkItem('username','`shop-users`', 
+					$filteredUsername);
+	            if($check == 1){
+		            $formErrors[] = "The Username is already exist";
+	             }else{
+	             	//Insert this info into Database 
+				   	$stmt =  $connect->prepare("INSERT INTO `shop-users`(username, Password, Email, RegStatus ,date) 
+				   		VALUES (:user, :pass, :mail , 0 ,now())");
+				   	$stmt->execute(array(
+				   		':user' => $filteredUsername,
+				   		':pass' => $pass1,
+				   		':mail' => $filteredEmail
+				   	));
+			     	//Echo Success Message
+			     $success = "<div class='alert alert-success'>You are Now Part of our family &#10084;</div>";
+				}
+		    
+  } 
+}
+} //END BIG ELSE
 ?> 
 <section class="login-form">
 	<div class="container">
@@ -156,6 +180,9 @@ ob_start();
 						}
 						echo "</div>";
 					}
+				    if(isset($success)){
+				    	echo $success;
+				    }
 				?>
 			
 			</div>

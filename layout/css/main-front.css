@@ -67,7 +67,10 @@ text-decoration: none
 /*End Upper Navbar*/
 /*Start Login Form*/
 form.login, 
-form.signup{
+form.signup, 
+.signup-errors,
+.items-errors
+{
 	max-width: 50%;
 	margin:auto;
 }
@@ -116,6 +119,25 @@ color: #5cb85c
     font-family: Raleway;
     left: 160px;
     margin-top: 5px;
+}
+.information ul{
+	margin: 0;
+	padding: 0
+}
+.information ul li{
+	padding: 10px
+}
+.information ul li:nth-child(even){
+	background: #EEE
+}
+.information ul li span{
+	display: inline-block;
+	width: 161px
+}
+.information ul li span.title{
+	font-family: lobster;
+	font-size: 18px
+
 }
 /*End Profile Page*/
 

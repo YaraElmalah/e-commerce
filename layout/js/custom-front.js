@@ -1,5 +1,9 @@
 $(function(){
 	'use strict';
+	//Live Preview For Adding New Ad
+	$('.live-preview input').on('keyup', function(){
+		$($(this).data('class')).text($(this).val());
+	})
 	//Switch between Login and Signup
 	$('.login-form h1 span').on('click', function(){
 		$(this).addClass('selected').siblings('span')

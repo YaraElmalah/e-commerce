@@ -1,5 +1,6 @@
 <?php 
 ob_start();
+$pageTitle = str_replace("-", " ", $_GET['pagename']);
 include 'init.php'; 
 $flag = false;
 foreach (getCats() as $cat => $catvalue) {

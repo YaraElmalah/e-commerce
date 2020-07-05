@@ -1,5 +1,8 @@
-<?php include 'init.php';
+<?php 
+$pageTitle = 'My profile';
+include 'init.php';
 if(isset($_SESSION['user'])){
+
 ?>
 <section class="profile">
 	<div class="container">
@@ -17,24 +20,46 @@ if(isset($_SESSION['user'])){
 					$stmt->execute(array($sessionUser));
 					$info = $stmt->fetch();
 					?>
-					<span class="text-capitalize"> name: <span>
-						<?php echo "<span>"  . $info['username'] . "</span> <br>" ?>
-				    <span class="text-capitalize"> contact email: <span>
-						<?php echo "<span>"  . $info['Email'] . "</span> <br>" ?>
-				    <span class="text-capitalize"> full name: <span>
-						<?php echo "<span>"  . $info['Full-Name'] . "</span> <br>" ?>
-				    <span class="text-capitalize"> registered date: <span>
-						<?php echo "<span>"  . $info['date'] . "</span> <br>" ?>
-					<span class="text-capitalize"> rank: <span>
+					<ul class="list-unstyled">
+					<li class="text-capitalize">
+					<i class="fas fa-user fa-fw"></i>
+					 <span class="title">username</span>:
+						<?php echo "<span>"  . $info['username'] . "</span>"  ?>
+					</li>
+				    <li class="text-capitalize"> 
+				    	<i class="fas fa-envelope fa-fw"></i>
+				    	<span class="title">contact email
+				    </span>:
+						<?php echo "<span>"  . $info['Email'] . "</span>" ?>
+					</li>
+				    <li class="text-capitalize">
+				    <i class="fas fa-id-card fa-fw"></i>
+				     <span class="title">full name</span>:
+						<?php if(!empty($info['Full-Name'])){
+						 echo "<span>"  . $info['Full-Name'] . "</span>"; 
+						} else{
+							echo "<span>"  . " --- " . "</span>";
+						}
+						?>
+					</li>
+				    <li class="text-capitalize">
+				    	<i class="fas fa-calendar-day fa-fw"></i>
+				    	<span class="title" >registered date</span>:<?php echo "<span>"  . $info['date'] . "</span>" ?>
+				    </li>
+					<li class="text-capitalize">
+						<i class="fas fa-hat-cowboy-side fa-fw"></i>
+						<span class="title">rank</span>:
 						<?php echo "<span>";
 						if($info['groupID'] == 1){
 							echo 'Admin';
+						}elseif ($info['RegStatus'] == 0) {
+							echo 'Waiting for Activation';
 						} else{
 							echo 'User';
 						}
-						echo  "</span> <br>" ?>
-						
-				    
+						echo  "</span>" ?>
+					</li>						
+				   </ul> 
 				</div>
 			</div>
 		</div>
@@ -64,6 +89,8 @@ if(isset($_SESSION['user'])){
 						}
 					} else{
 						echo "<div class='empty-message'>There is no ads to show</div>";
+						echo "<a href='additem.php' class=\"btn btn-info\">
+		            <i class=\"fas fa-folder-plus\"></i> New Ad</a>";
 					}
 				 
 					?>
@@ -78,7 +105,7 @@ if(isset($_SESSION['user'])){
 					Latest Comments
 				</div>
 				<div class="panel-body">
-					<div class="row">
+					
 					<?php
 					$stmt = $connect->prepare("
 						SELECT comment, added_Date FROM comments
@@ -87,6 +114,7 @@ if(isset($_SESSION['user'])){
 					$stmt->execute(array($info['UserID']));
 					$comments = $stmt->FetchAll();
 					if(!empty($comments)){
+					echo "<div class=\"row\">";
 					foreach ($comments as $comment ) {
 					echo "<div class='col-sm-3'>";
 					echo "<p class='profile-c'>" . $comment['comment'];
@@ -96,12 +124,12 @@ if(isset($_SESSION['user'])){
 					echo "</div>";
 					
 					}
+					echo "</div>";
 				} else{
 					echo "<div class='empty-message'>There is no comments to show</div>";
 				}
 
 					?>
-				</div>
 				</div>
 			</div>
 		</div>
