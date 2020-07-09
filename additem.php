@@ -3,7 +3,7 @@ $pageTitle = 'Add New Ad';
 include 'init.php';
 if(isset($_SESSION['user'])){
 	if($_SERVER['REQUEST_METHOD'] == 'POST'){
-		$formErrors = array();
+		$formErrors = [];
 		$itemName   = filter_var($_POST['name'] , FILTER_SANITIZE_STRING);
 		$desc       = filter_var($_POST['desc'] , FILTER_SANITIZE_STRING);
 		$price      = filter_var($_POST['price'] ,  
@@ -14,18 +14,65 @@ if(isset($_SESSION['user'])){
 			                     FILTER_SANITIZE_NUMBER_INT);
 		$category   = filter_var($_POST['category'],
 		                         FILTER_SANITIZE_NUMBER_INT);
-		if(strlen($itemName) < 4){
-			$formErrors[] = "Item Name should be more than 4 Characters";
+
+		if(empty($itemName)){
+			$formErrors[] = "Name can't be <strong>empty</strong>";
+		} 
+		if (empty($desc)) {
+			$formErrors[] = "Description can't be <strong>empty</strong>";
 		}
-		if(empty($price)){
-			$formErrors[] = "Price Can't be Empty";
+		if (empty($price)) {
+			$formErrors[] = "Price can't be <strong>empty</strong>";
+		} 	
+		if (empty($country)) {
+			$formErrors[] = "Country Filed can't be <strong>empty</strong>";
+		} 
+		if ($status == 0) {
+			$formErrors[] = "You Should chose the status of The Item";
 		}
-		if(empty($status)){
-			$formErrors[] = "Status Can't be Empty";
+		if ($category == 0) {
+			$formErrors[] = "You Should chose the Category of The Item";
 		}
-		if(empty($category)){
-			$formErrors[] = "Category Can't be Empty";
-		}
+		//Database Query
+			//Check if There is no errors 
+			if(empty($formErrors)){
+	           
+	             //Insert this info into Database 
+				   	$stmt =  $connect->prepare("INSERT INTO items 
+				   		(Name , Description, Price, Origin, Status , MemberID, CatID , `Date`) 
+				   		VALUES 
+				   		(:item, :des , :price, :country, :status, :members, :cats , now())");
+				   	$stmt->execute(array(
+				   		':item'    => $itemName,
+				   		':des'     => $desc,
+				   		':price'   => '$' . $price,
+				   		':country' => $country,
+				   		':status'  => $status,
+				   		':members' => $useridSession ,
+				   		':cats'    => $category
+
+				   	));
+			     	//Echo Success Message
+			     	if($stmt){
+			     		echo "<div class='alert alert-success text-center'>The Item is added Successfully &#128079; &#x1F44F;</div>";
+			     		$itemName = NULL;
+			     		$desc     = NULL;
+			     		$price    = NULL;
+			     		$country  = NULL;
+			     		$status   = NULL;
+			     		$category = NULL;
+			     	}
+
+				} else{
+				//Get The Errors
+				echo "<div class='container'>";
+	          foreach ($formErrors as $error) {
+				echo "<div class='alert alert-danger'>"  . 
+				$error . "</div>";
+			 }
+
+			}
+			
 	}
 
 ?>
@@ -52,7 +99,9 @@ if(isset($_SESSION['user'])){
 					<div class="col-sm-10 col-md-8">
 						<input type="text" name="name" class="form-control"      
 						 placeholder="The Name of this Item"
-						 data-class='.live-title'>
+						 data-class='.live-title'
+						 value = "<?php if(isset($itemName)): echo 
+						 $itemName; endif; ?>">
 					</div>
 				</div>
 				<!--End Item Name-->
@@ -63,7 +112,9 @@ if(isset($_SESSION['user'])){
 				</label>
 				<div class="col-sm-10 col-md-8">
 				<input type="text" name="desc" class="form-control" placeholder="Describe This Item"     
-				data-class='.live-desc'>
+				data-class='.live-desc'
+				 value = "<?php if(isset($desc)): echo 
+						 $desc; endif; ?>">
 				</div>
 				</div>
 				<!--End Description-->
@@ -72,7 +123,8 @@ if(isset($_SESSION['user'])){
 						<label class="col-sm-2 control-label"> Price
 				   </label>
 					<div class="col-sm-10 col-md-8">
-						<input type="text" name="price" class="form-control" placeholder="The Price of the Item"     
+						<input type="text" name="price" class="form-control" placeholder="The Price of the Item" value = "<?php if(isset($price)): echo 
+						 $price; endif; ?>"
 						data-class='.live-price'>
 					</div>
 					</div>
@@ -82,7 +134,9 @@ if(isset($_SESSION['user'])){
 						<label class="col-sm-2 control-label"> Made In
 				   </label>
 					<div class="col-sm-10 col-md-8">
-						<input type="text" name="country" class="form-control" placeholder="The Country that the Item Made in"     >
+						<input type="text" name="country" class="form-control" placeholder="The Country that the Item Made in"   
+						value = "<?php if(isset($country)): echo 
+						 $country; endif; ?>"  >
 					</div>
 					</div>
 				<!--End Country Made Field-->
@@ -92,11 +146,20 @@ if(isset($_SESSION['user'])){
 			   </label>
 				<div class="col-sm-10 col-md-8">
 					<select name="status">
-						<option value=""></option>
-						<option value="1">New</option>
-						<option value="2">Like New</option>
-						<option value="3">Used</option>
-						<option value="4">Old</option>
+						<option value="0"></option>
+						<option value="1"
+						 <?php 
+						if(isset($status) && $status == 1): echo 'Selected';  
+						endif;?>>New</option>
+						<option value="2" <?php 
+						if(isset($status) && $status == 2): echo 'Selected';  
+						endif;?>>Like New</option>
+						<option value="3" <?php 
+						if(isset($status) && $status == 3): echo 'Selected';  
+						endif;?>>Used</option>
+						<option value="4" <?php 
+						if(isset($status) && $status == 4): echo 'Selected';  
+						endif;?>>Old</option>
 
 					</select>
 				</div>
@@ -108,14 +171,18 @@ if(isset($_SESSION['user'])){
 			   </label>
 				<div class="col-sm-10 col-md-8">
 					<select name="category">
-						<option value=""></option>
+						<option value="0"></option>
 						<?php 
 							$stmt2 = $connect->prepare("SELECT 
 								* FROM categories");
 							$stmt2->execute(); 
 							$cats = $stmt2->fetchAll();
 						foreach ($cats as $cat) {
-							echo "<option value='". $cat['ID'] . "'>" .
+							echo "<option value='". $cat['ID'] . "'"; 
+							if(isset($category) && $category == $cat['ID']){
+								echo 'selected';
+							}
+						   echo ">" .
 							 $cat['Name'] . "</option>";
 						}
 				?>
@@ -160,9 +227,22 @@ if(isset($_SESSION['user'])){
 							<div class='thumbnail item-box text-center'>
 							<img src='item-avatar.png' alt=''>
 							<div class='caption'>
-							<h3 class="live-title"></h3>
-							<p class="live-desc"></p>
-							 <span class='price-tag'>$ <span class="live-price"></span> 
+							<h3 class="live-title"><?php if(isset($itemName)){
+								echo $itemName;
+							}else{
+								echo "Title";
+							}?>
+							</h3>
+							<p class="live-desc"><?php if(isset($desc)){
+								echo $desc;
+							}else{
+								echo "Description";
+							}?></p>
+							 <span class='price-tag'>$ <span class="live-price"><?php if(isset($price)){
+								echo $price;
+							}else{
+								echo " ";
+							}?></span> 
 							 </span>
 							</div>
 							

@@ -226,16 +226,16 @@ $do = isset($_GET['do'])? $_GET['do']: $do = 'Manage';
 		$formErrors = [];
 
 		if(empty($name)){
-			$formErrors[] = "Name can't <strong>empty</strong>";
+			$formErrors[] = "Name can't be <strong>empty</strong>";
 		} 
 		if (empty($desc)) {
-			$formErrors[] = "Description can't <strong>empty</strong>";
+			$formErrors[] = "Description can't  be <strong>empty</strong>";
 		}
 		if (empty($price)) {
-			$formErrors[] = "Price can't <strong>empty</strong>";
+			$formErrors[] = "Price can't  be <strong>empty</strong>";
 		} 	
 		if (empty($country)) {
-			$formErrors[] = "Country Filed can't <strong>empty</strong>";
+			$formErrors[] = "Country Filed can't  be <strong>empty</strong>";
 		} 
 		if ($status == 0) {
 			$formErrors[] = "You Should chose the status of The Item";

@@ -79,10 +79,14 @@ if(isset($_SESSION['user'])){
 							echo "<div class='thumbnail item-box text-center'>";
 							echo "<img src='item-avatar.png' alt=''>";
 							echo "<div class='caption'>" . 
-							"<h3>" .$ad['Name'] . "</h3>"
+							"<h3><a href='items.php?itemid= " .
+							 $ad['itemID'] ."&pageName=". 
+							 str_replace(" ", "-", $ad['Name']) ."'>" .$ad['Name'] . "</a></h3>"
 							 . "<p>"	. $ad['Description'] . "</p>" . 
 							 "<span class='price-tag'>" . $ad['Price'] 
-							 . "</span>"
+							 . "</span>" . 
+							 "<span class='date'>" . $ad['Date'] .
+							  "</span>"
 							.  "</div>";
 							echo "</div>";
 						echo  "</div>";

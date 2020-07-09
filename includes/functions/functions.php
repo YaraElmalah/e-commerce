@@ -51,8 +51,20 @@ function getItems($value , $where){
 		                          ORDER BY Date DESC
 		                           ");
 	$stmt->execute(array($value));
-	$items = $stmt->fetchAll();
+	$items = $stmt->fetchAll(); //MultiDimensional Array
 	return $items;
+}
+/*
+get single Item from the Database
+*/
+function getItem($value , $where){
+	global $connect;
+	$stmt = $connect->prepare("SELECT * FROM items WHERE $where = ?
+		                          LIMIT 1
+		                           ");
+	$stmt->execute(array($value));
+	$item = $stmt->fetch();
+	return $item;
 }
 //checkUserStatusV1.0
 /*

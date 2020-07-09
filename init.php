@@ -16,5 +16,6 @@
     $sessionUser  = '';
     if(isset($_SESSION['user'])){
         $sessionUser = $_SESSION['user'];
+        $useridSession  = $_SESSION['iduser'];
     }
     ?>

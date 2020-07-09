@@ -49,6 +49,10 @@ textarea.form-control{
     font-family: lobster;
     font-size: 20px;
 }
+hr.custom{
+	border-top: 1px solid #33333361;
+}
+
 /*End Rules*/
 /*Start Upper Navbar*/
 .upper-bar{
@@ -91,6 +95,7 @@ color: #5cb85c
 /*Start Categories Page*/
 .item-box{
 	position: relative;
+	height: 450px
 }
 .item-box .price-tag{
 	background-color: #BEBEBE;
@@ -102,7 +107,23 @@ color: #5cb85c
 	color: #8b4444
 
 }
+.item-box .date{
+    font-size: 13px;
+    color: #AAA;
+    font-weight: bold;
+    position: absolute;
+    right: 18px;
+}
 /*End Categories Page*/
+/*Start Items Page*/
+.item-info h1{
+	padding: 10px;
+	margin: 35px
+}
+.item-info ul li{
+padding: 10px
+}
+/*End Items Page*/
 /*Start Profile Page*/
 .profile-c{
 	position: relative;
@@ -120,17 +141,18 @@ color: #5cb85c
     left: 160px;
     margin-top: 5px;
 }
-.information ul{
+.information ul , .item-info ul{
 	margin: 0;
 	padding: 0
 }
-.information ul li{
+.information ul li, .item-info ul li{
 	padding: 10px
 }
-.information ul li:nth-child(even){
+.information ul li:nth-child(even), 
+.item-info ul li:nth-child(even){
 	background: #EEE
 }
-.information ul li span{
+.information ul li span, .item-info ul li span{
 	display: inline-block;
 	width: 161px
 }

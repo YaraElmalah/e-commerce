@@ -19,12 +19,14 @@ ob_start();
         where username =? And Password =? 
         ");
   		$stmt->execute(array($user, $securePass));
+  		$userInfo = $stmt->fetch();
   		$count = $stmt-> rowCount();
   		// echo $count; if the record is existed then it gives 1
   		//Check if the Record is existed 
   		if($count > 0){
   		$_SESSION['user']      = $user; //Register Session Name
   		$_SESSION['pass-user'] = $pass; //Register Session Name
+  		$_SESSION['iduser']    = $userInfo['UserID'];
   			header('location: index.php');
   			exit(); //Stop the Script 
   		}
