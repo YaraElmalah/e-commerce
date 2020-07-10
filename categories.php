@@ -26,7 +26,9 @@ foreach (getCats() as $cat => $catvalue) {
 							echo "<div class='thumbnail item-box text-center'>";
 							echo "<img src='item-avatar.png' alt=''>";
 							echo "<div class='caption'>" . 
-							"<h3>" .$item['Name'] . "</h3>"
+							"<h3><a href='items.php?itemid= " .
+							 $item['itemID'] ."&pageName=". 
+							 str_replace(" ", "-", $item['Name']) ."'>" .$item['Name'] . "</a></h3>"
 							 . "<p>"	. $item['Description'] . "</p>" . 
 							 "<span class='price-tag'>" . $item['Price'] 
 							 . "</span>"

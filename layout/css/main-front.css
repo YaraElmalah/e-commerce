@@ -123,6 +123,15 @@ color: #5cb85c
 .item-info ul li{
 padding: 10px
 }
+.add-comment h3{
+	font-family: Lobster;
+	margin: 0 0 10px
+} 
+.add-comment textarea{
+	display: block;
+	margin: 10px auto;
+	height: 120px
+}
 /*End Items Page*/
 /*Start Profile Page*/
 .profile-c{

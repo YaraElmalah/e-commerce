@@ -101,7 +101,8 @@ if(isset($_SESSION['user'])){
 						 placeholder="The Name of this Item"
 						 data-class='.live-title'
 						 value = "<?php if(isset($itemName)): echo 
-						 $itemName; endif; ?>">
+						 $itemName; endif; ?>"
+						 required>
 					</div>
 				</div>
 				<!--End Item Name-->
@@ -114,7 +115,7 @@ if(isset($_SESSION['user'])){
 				<input type="text" name="desc" class="form-control" placeholder="Describe This Item"     
 				data-class='.live-desc'
 				 value = "<?php if(isset($desc)): echo 
-						 $desc; endif; ?>">
+						 $desc; endif; ?>" required>
 				</div>
 				</div>
 				<!--End Description-->
@@ -125,7 +126,7 @@ if(isset($_SESSION['user'])){
 					<div class="col-sm-10 col-md-8">
 						<input type="text" name="price" class="form-control" placeholder="The Price of the Item" value = "<?php if(isset($price)): echo 
 						 $price; endif; ?>"
-						data-class='.live-price'>
+						data-class='.live-price' required>
 					</div>
 					</div>
 				<!--End Price Field-->
@@ -136,7 +137,7 @@ if(isset($_SESSION['user'])){
 					<div class="col-sm-10 col-md-8">
 						<input type="text" name="country" class="form-control" placeholder="The Country that the Item Made in"   
 						value = "<?php if(isset($country)): echo 
-						 $country; endif; ?>"  >
+						 $country; endif; ?>"  required>
 					</div>
 					</div>
 				<!--End Country Made Field-->
