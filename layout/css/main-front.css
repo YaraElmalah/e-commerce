@@ -95,7 +95,7 @@ color: #5cb85c
 /*Start Categories Page*/
 .item-box{
 	position: relative;
-	height: 450px
+	height: 500px
 }
 .item-box .price-tag{
 	background-color: #BEBEBE;
@@ -114,6 +114,15 @@ color: #5cb85c
     position: absolute;
     right: 18px;
 }
+.item-box .approve-pending{
+	position: absolute;
+    bottom: 10px;
+    left: 55px;
+    padding: 10px;
+    background: #e56d6de6;
+    border-radius: 10px;
+    color: #FFF;
+}
 /*End Categories Page*/
 /*Start Items Page*/
 .item-info h1{
@@ -131,6 +140,32 @@ padding: 10px
 	display: block;
 	margin: 10px auto;
 	height: 120px
+}
+.comment-box{
+	margin-bottom: 20px;
+}
+.comment-box img{
+	max-width: 100%;
+	margin-bottom: 10px
+}
+.comment-box .lead{
+	background: #e7e7e7;
+	position: relative;
+	padding: 10px;
+	border-radius: 10px;
+	top: 37px
+
+}
+.comment-box .lead:before{
+	content: "";
+    width: 0;
+    height: 0;
+    border-width: 11px;
+    border-style: solid;
+    border-color: transparent #e7e7e7 transparent transparent;
+    left: -23px;
+    top: 16px;
+    position: absolute;
 }
 /*End Items Page*/
 /*Start Profile Page*/

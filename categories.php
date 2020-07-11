@@ -19,7 +19,7 @@ foreach (getCats() as $cat => $catvalue) {
 			<div class="row">
 				
 				<?php 
-				$CatItems = getItems($_GET['pageid'] , 'CatID');
+				$CatItems = getItems($_GET['pageid'] , 'CatID' , 'Approved');
 				   if(! empty($CatItems)){
 					foreach ($CatItems as $item) {
 						echo "<div class='col-sm-6 col-md-3'>";

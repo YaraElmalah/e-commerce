@@ -1,8 +1,9 @@
 <?php 
 $pageTitle = str_replace("-", " ", $_GET['pageName']);
 include 'init.php';
-$flag = false;
-foreach (getItems($pageTitle, 'Name') as $item => $itemSelf) {
+$flag       = false;
+$itemDetail = getItems($pageTitle, 'Name' , 'Approved');
+foreach ($itemDetail as $item => $itemSelf) {
 	if(in_array($pageTitle, $itemSelf)){
 		$flag = true; //To make sure that you enter the correct page without error pages displayed
 	}
@@ -58,11 +59,27 @@ foreach (getItems($pageTitle, 'Name') as $item => $itemSelf) {
 		</div>
 		<hr class="custom">
 		<?php 
+		
 			//Add Comment 
 		if($_SERVER['REQUEST_METHOD'] == 'POST'){
 			$comment = filter_var($_POST['comment'],
 			 FILTER_SANITIZE_STRING);
-			echo $comment;
+			$userid  = $_SESSION['iduser'];
+			$itemid  = $myItem['itemID'];
+			if(!empty($comment)){
+					$stmt = $connect->prepare("INSERT INTO comments (comment, status, added_Date, itemID, UserID) 
+						VALUES(:com, 0 , now() , :item, :user)");
+					$stmt->execute(array(
+						':com'  => $comment,
+						':item' => $itemid,
+						':user' => $userid
+					));
+					if($stmt){
+						echo "<div class='alert alert-info text-center'>Thanks for sharing your Experience, The Comment is pending &#10024; </div>";
+					}
+			} else{
+				echo "<div class='alert alert-danger text-center'>The Comment Can't be Empty!</div>";
+			}
 		}
 		?>
 		<div class="add-comment">
@@ -85,13 +102,36 @@ foreach (getItems($pageTitle, 'Name') as $item => $itemSelf) {
 		</div>
 	</div>
 		<hr class="custom">
+		<?php 
+			$getCom = $connect->prepare("SELECT comments.*,
+			 `shop-users`.username AS user
+			 FROM comments
+			 INNER JOIN `shop-users` ON 
+			 comments.UserID = `shop-users`.UserID
+				      WHERE itemID = ? AND Status = 1");
+			$getCom->execute(array($myItem['itemID']));
+			$itemComments = $getCom->fetchAll();
+			foreach ($itemComments as $comment) {
+			
+		?>
+		<div class="comment-box">
 		<div class="row">
-			<div class="col-sm-3">User Image</div>
-			<div class="col-sm-9">User Comment</div>
+			<div class="col-sm-2">
+				<img src="item-avatar.png" class="img-thumbnail img-circle center-block" alt="user-img">
+				<h4 class="text-center"><a href="#"><?php echo $comment['user'] ?></a></h4>
+			</div>
+			<div class="col-sm-10">
+				<p class="lead">
+				<?php echo $comment['comment'] ?>
+			</p>
+			</div>
 		</div>
+		<hr class="custom">
+	<?php }?>
 	</div>
+</div>
 </section>
 <?php } else{
-	echo "There is no such item";
+	echo "Sorry there is no Approved Items now with this Request :(";
 }?> 
 <?php include $templates . 'footer.php'; ?>

@@ -41,13 +41,15 @@ function getCats(){
 	$cats = $stmt->fetchAll();
 	return $cats;
 }
-//getItems V1.0
+//getItems V2.0
 /*
-get Items from the Database
+get Items from the Database (Approved or not)
+if You Want to show only the approved items then pass the third parameter
 */
-function getItems($value , $where){
+function getItems($value , $where, $approved = NULL){
 	global $connect;
-	$stmt = $connect->prepare("SELECT * FROM items WHERE $where = ?
+	$approved != NULL ? $sql = 'AND Approve = 1' :  $sql = NULL;
+	$stmt = $connect->prepare("SELECT * FROM items WHERE $where = ? $sql
 		                          ORDER BY Date DESC
 		                           ");
 	$stmt->execute(array($value));

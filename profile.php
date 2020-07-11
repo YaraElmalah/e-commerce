@@ -86,8 +86,11 @@ if(isset($_SESSION['user'])){
 							 "<span class='price-tag'>" . $ad['Price'] 
 							 . "</span>" . 
 							 "<span class='date'>" . $ad['Date'] .
-							  "</span>"
-							.  "</div>";
+							  "</span>";
+							  if($ad['Approve'] == 0){
+							  	echo "<span class='approve-pending'>" . "Waiting for Approve" . "</span>";
+							  }
+							echo   "</div>";
 							echo "</div>";
 						echo  "</div>";
 						}
