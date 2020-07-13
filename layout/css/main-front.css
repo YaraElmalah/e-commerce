@@ -58,9 +58,13 @@ hr.custom{
 .upper-bar{
 	padding: 10px;
 	background: #332f2f;
+	color: #fff;
 }
 .upper-bar span{
 	margin-left: 15px
+}
+.upper-bar .btn, .upper-bar .btn:hover{
+	color: #9d9d9d;
 }
 .upper-bar a{
 color: #fff;
@@ -205,6 +209,9 @@ padding: 10px
 	font-size: 18px
 
 }
+.information .btn{
+	margin-top: 10px
+}
 /*End Profile Page*/
 
 /*****Start Bootsrap Edits****/
@@ -221,9 +228,10 @@ padding: 10px
 }
 .navbar-inverse .navbar-nav>.open>a, 
 .navbar-inverse .navbar-nav>.open>a:focus,
- .navbar-inverse .navbar-nav>.open>a:hover, 
+ .navbar-inverse .navbar-nav>.open>a:hover,
+ .upper-bar .navbar-nav > .open > a, 
  .dropdown-menu{
-background-color: #2e86de
+background-color: #333
 }
 .dropdown-menu{
 	font-size: 1em;

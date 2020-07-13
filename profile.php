@@ -15,6 +15,7 @@ if(isset($_SESSION['user'])){
 				</div>
 				<div class="panel-body"> 
 					<?php
+
 					$stmt = $connect->prepare("SELECT * FROM `shop-users` 
 						WHERE username = ?");
 					$stmt->execute(array($sessionUser));
@@ -60,19 +61,20 @@ if(isset($_SESSION['user'])){
 						echo  "</span>" ?>
 					</li>						
 				   </ul> 
+				   <a href="#" class="btn btn-default">Edit Information</a>
 				</div>
 			</div>
 		</div>
 		<!--End About Me-->
 		<!--Start My Ads-->
-		<div class="ads">
+		<div class="ads" id='call-ads'>
 			<div class="panel panel-primary">
 				<div class="panel-heading">
 					My Ads
 				</div>
 				<div class="panel-body"> 
 					<?php
-					$userAds = getItems($info['UserID'] , 'MemberID');
+					$userAds = getAllFrom("*" , 'items' , "WHERE MemberID = {$info['UserID']}" , 'itemID');
 					if(!empty($userAds)){
 						foreach ($userAds as $ad) {
 							echo "<div class='col-sm-6 col-md-3'>";

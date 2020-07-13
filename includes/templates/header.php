@@ -20,14 +20,27 @@
       session_start();
         if (isset($_SESSION['user'])){
           echo "<span class='welcome-message'> Welcome back, " . $_SESSION['user'] . " .. <i class=\"fab fa-pagelines\"></i> </span>";
-          echo "<span class='btn btn-primary text-capitalize'><a href='profile.php'>my profile</a> </span>";
-          echo "<span class='btn btn-info text-capitalize'><a href='additem.php'>
-                <i class=\"fas fa-folder-plus\"></i> New Ad</a> </span>";
-          echo "<span class='btn btn-danger text-capitalize'><a href='logout.php'>logout</a> </span>";
+          ?>
+            <div class="btn-group navbar-nav navbar-right">
+              <span class="btn dropdown-toggle" data-toggle="dropdown">
+                  <?php echo  $_SESSION['user'] ?> 
+                  <span class="caret"></span>
+              </span>
+              <div class="dropdown-menu text-capitalize">
+                 <?php
           
-            if(checkUserStatus($_SESSION['user']) == 0 ){
-              echo "  <span class='pull-right text-primary'> Please Wait for Admin Activation, thanks for your Patience <i class=\"far fa-laugh-beam\"></i> </span>";
-          }
+            if(checkUserStatus($_SESSION['user']) == 0 ){?>
+              <li><a href='#'><i class="far fa-laugh-beam"></i> not activated</a></li>
+                  <?php }
+                  ?>
+                  <li><a href="profile.php"><i class="far fa-user-circle"></i> profile</a></li>
+                  <li><a href="profile.php#call-ads"><i class="fas fa-map-pin"></i> my ads</a></li>
+                  <li><a href="additem.php"><i class="fas fa-folder-plus"></i> New Ad</a></li>
+                  <li><a href="logout.php"><i class="fas fa-sign-out-alt"></i> logout</a></li>
+              </div>
+            </div>
+            <img src="item-avatar.png" alt="person" class="img-circle img-thumbnail navbar-right" height="35px" width="32px">
+          <?php
         } else{
 
             echo "<span class=\"pull-right text-capitalize text-primary\"><a href='login.php'>don't miss a hit ! login or signup now</a></span>";

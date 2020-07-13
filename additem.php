@@ -27,10 +27,10 @@ if(isset($_SESSION['user'])){
 		if (empty($country)) {
 			$formErrors[] = "Country Filed can't be <strong>empty</strong>";
 		} 
-		if ($status == 0) {
+		if ($status == "") {
 			$formErrors[] = "You Should chose the status of The Item";
 		}
-		if ($category == 0) {
+		if ($category == "") {
 			$formErrors[] = "You Should chose the Category of The Item";
 		}
 		//Database Query
@@ -97,7 +97,10 @@ if(isset($_SESSION['user'])){
 					Item Name
 				</label>
 					<div class="col-sm-10 col-md-8">
-						<input type="text" name="name" class="form-control"      
+						<input type="text" name="name" 
+						  class="form-control"   
+						  pattern=".{4,}"
+						  title="The name should be more than 4 characters"
 						 placeholder="The Name of this Item"
 						 data-class='.live-title'
 						 value = "<?php if(isset($itemName)): echo 
@@ -146,8 +149,8 @@ if(isset($_SESSION['user'])){
 					<label class="col-sm-2 control-label"> Status
 			   </label>
 				<div class="col-sm-10 col-md-8">
-					<select name="status">
-						<option value="0"></option>
+					<select name="status" required>
+						<option value=""></option>
 						<option value="1"
 						 <?php 
 						if(isset($status) && $status == 1): echo 'Selected';  
@@ -171,8 +174,8 @@ if(isset($_SESSION['user'])){
 					<label class="col-sm-2 control-label"> Category
 			   </label>
 				<div class="col-sm-10 col-md-8">
-					<select name="category">
-						<option value="0"></option>
+					<select name="category" required>
+						<option value=""></option>
 						<?php 
 							$stmt2 = $connect->prepare("SELECT 
 								* FROM categories");

@@ -19,7 +19,8 @@ foreach (getCats() as $cat => $catvalue) {
 			<div class="row">
 				
 				<?php 
-				$CatItems = getItems($_GET['pageid'] , 'CatID' , 'Approved');
+
+				$CatItems = getAllFrom('*' , 'items' , "WHERE Approve = 1 AND CatID = {$_GET['pageid']}" , 'itemID');
 				   if(! empty($CatItems)){
 					foreach ($CatItems as $item) {
 						echo "<div class='col-sm-6 col-md-3'>";
@@ -31,7 +32,8 @@ foreach (getCats() as $cat => $catvalue) {
 							 str_replace(" ", "-", $item['Name']) ."'>" .$item['Name'] . "</a></h3>"
 							 . "<p>"	. $item['Description'] . "</p>" . 
 							 "<span class='price-tag'>" . $item['Price'] 
-							 . "</span>"
+							 . "</span>" . 
+							 "<span class='date'>" .$item['Date'] . "</span>" 
 							.  "</div>";
 							echo "</div>";
 						echo  "</div>";
