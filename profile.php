@@ -116,12 +116,13 @@ if(isset($_SESSION['user'])){
 				<div class="panel-body">
 					
 					<?php
-					$stmt = $connect->prepare("
+					/*$stmt = $connect->prepare("
 						SELECT comment, added_Date FROM comments
 						WHERE UserID = ? 
 						ORDER BY added_Date DESC");
 					$stmt->execute(array($info['UserID']));
-					$comments = $stmt->FetchAll();
+					$comments = $stmt->FetchAll();*/
+					$comments = getAllFrom('comment, added_Date', 'comments', "WHERE UserID ={$info['UserID']} " , 'c_id');
 					if(!empty($comments)){
 					echo "<div class=\"row\">";
 					foreach ($comments as $comment ) {

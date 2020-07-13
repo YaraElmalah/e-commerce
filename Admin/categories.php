@@ -10,6 +10,8 @@ $sort = 'ASC';
 $sort_array = array('ACS', 'DESC'); //We will depend on it in get request
 if(isset($_SESSION['username'])){  
 	include 'init.php';
+	$cats = getAllFrom('*', 'categories', 'WHERE Parent = 0' , $orderBy ,
+                  'ASC');
 		//Page Content
 	//Write The Short if Condition
 $do = isset($_GET['do'])? $_GET['do']: $do = 'Manage'; 
@@ -21,10 +23,8 @@ $do = isset($_GET['do'])? $_GET['do']: $do = 'Manage';
 			$sort = $_GET['sort'];
 		}	
 
-			$stmt = $connect->prepare("SELECT * FROM categories
-			                           ORDER BY $orderBy $sort");
-			$stmt->execute();
-			$cats = $stmt->fetchAll(); //now we get all the info about the categories
+			$cats = getAllFrom('*', 'categories', 'WHERE Parent = 0' , $orderBy ,
+                  'ASC');
 		?>
 	
 <div class="categories">
@@ -139,6 +139,26 @@ $do = isset($_GET['do'])? $_GET['do']: $do = 'Manage';
 					<div class="col-sm-10 col-md-6">
 						<input type="number" name="order" class="form-control"  
 						 placeholder="Enter the Order You Want to show this Category off">
+					</div>
+				</div>
+				<!--End Ordering-->
+				<!--Start Category Type-->
+				<div class="form-group">
+					<label class="col-sm-2 control-label">
+					Category Type
+				    </label>
+					<div class="col-sm-10 col-md-6">
+					<select required>
+						<option name='cat-type' required>
+							<option value="0">Main</option>
+							<?php 
+							foreach ($cats as $cat) {
+							echo "<option value='". $cat['ID'] . "'>" .
+							 $cat['Name'] . "</option>";
+							}
+							?>
+						</option>
+					</select>
 					</div>
 				</div>
 				<!--End Ordering-->

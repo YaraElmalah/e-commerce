@@ -1,5 +1,22 @@
 <?php
 ob_start();
+//getAllFrom() V1.0
+/*
+Function to get All Records form specific Table
+$field     = the record that You want to get from the table example: * , Name
+$table     = the table that you want to get from the records
+$where     = the condition that under which you get the records
+$orderBy   = the column that you want to order by the data
+$orderType = ASC or DESC (DESC is the Default)
+*/
+function getAllFrom($field, $table, $where = NULL , $orderBy ,
+ $orderType = 'DESC'){
+ 	global $connect;
+	$stmt = $connect->prepare("SELECT $field FROM $table $where ORDER BY  $orderBy $orderType");
+	$stmt->execute();
+	$records = $stmt->fetchAll();
+	return $records;
+}
 //getTitle Page V1.0
 /*
 Get Title of the page
