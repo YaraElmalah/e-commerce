@@ -91,7 +91,7 @@ $do = isset($_GET['do'])? $_GET['do']: $do = 'Manage';
 		    			     echo "</div>";
 		    			     foreach ($subcats as $c ) {
 		    			        if($cat['ID'] == $c['Parent']){
-		    			     	echo "<a href='?do=Edit&catid= ". $c['ID']  . "'>" . $c['Name'] . "</a>";
+		    			     	echo "<a class='sub-cat' href='?do=Edit&catid= ". $c['ID']  . "'>" . $c['Name'] . "</a>";
 		    			     }
 		    			     }
 		    			      echo "<hr>";
@@ -353,6 +353,7 @@ $do = isset($_GET['do'])? $_GET['do']: $do = 'Manage';
 					<select name='cat-type' required>
 							<option value="0" <?php if($row['Parent'] == 0): echo 'selected'; endif;?>>Main</option>
 							<?php 
+						//$row here referes to the opened page category
 							foreach ($cats as $cat) {
 							echo "<option value='". $cat['ID'] . "'";
 								if($row['Parent'] == $cat['ID']){
@@ -429,6 +430,7 @@ $do = isset($_GET['do'])? $_GET['do']: $do = 'Manage';
 				</label>
 					<div class="col-sm-10 col-md-6">
 						<input type="submit" value="Save Gategory" class="btn btn-primary btn-lg">
+						<a href='?do=Delete&catid=<?php echo $catid ?>' class='btn  btn-danger confirm btn-lg'><i class="fas fa-trash"></i> Delete Category</a>
 					</div>
 				</div>
 				<!--End Submit-->
