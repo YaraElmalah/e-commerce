@@ -12,6 +12,7 @@ if(isset($_SESSION['username'])){
 	include 'init.php';
 	$cats = getAllFrom('*', 'categories', 'WHERE Parent = 0' , $orderBy ,
                   'ASC');
+	$subcats = getAllFrom('*', 'categories', 'WHERE Parent != 0' , $orderBy ,'ASC');
 		//Page Content
 	//Write The Short if Condition
 $do = isset($_GET['do'])? $_GET['do']: $do = 'Manage'; 
@@ -23,8 +24,6 @@ $do = isset($_GET['do'])? $_GET['do']: $do = 'Manage';
 			$sort = $_GET['sort'];
 		}	
 
-			$cats = getAllFrom('*', 'categories', 'WHERE Parent = 0' , $orderBy ,
-                  'ASC');
 		?>
 	
 <div class="categories">
@@ -90,6 +89,11 @@ $do = isset($_GET['do'])? $_GET['do']: $do = 'Manage';
 		    			     echo "</div>";
 
 		    			     echo "</div>";
+		    			     foreach ($subcats as $c ) {
+		    			        if($cat['ID'] == $c['Parent']){
+		    			     	echo "<a href='?do=Edit&catid= ". $c['ID']  . "'>" . $c['Name'] . "</a>";
+		    			     }
+		    			     }
 		    			      echo "<hr>";
 		    			
 		    				
@@ -148,8 +152,7 @@ $do = isset($_GET['do'])? $_GET['do']: $do = 'Manage';
 					Category Type
 				    </label>
 					<div class="col-sm-10 col-md-6">
-					<select required>
-						<option name='cat-type' required>
+					<select name='cat-type' required>
 							<option value="0">Main</option>
 							<?php 
 							foreach ($cats as $cat) {
@@ -161,7 +164,7 @@ $do = isset($_GET['do'])? $_GET['do']: $do = 'Manage';
 					</select>
 					</div>
 				</div>
-				<!--End Ordering-->
+				<!--End Category Type-->
 				<!--Start Visibility-->
 				<div class="form-group">
 					<label class="col-sm-2 control-label">
@@ -236,12 +239,13 @@ $do = isset($_GET['do'])? $_GET['do']: $do = 'Manage';
        if($_SERVER['REQUEST_METHOD'] === "POST"){
 		echo "<h1 class='text-center'>Insert New Category</h1>"; 
 		//Get Variables From the Form
-		$name = $_POST['name'];
-		$desc = $_POST['desc'];
-		$order = $_POST['order'];
-		$visibility = $_POST['visibility'];
+		$name         = $_POST['name'];
+		$desc         = $_POST['desc'];
+		$order        = $_POST['order'];
+		$catType      = $_POST['cat-type'];
+		$visibility   = $_POST['visibility'];
 		$allowComment = $_POST['comment'];
-		$allowAds = $_POST['ads'];
+		$allowAds     = $_POST['ads'];
 		//Check if Category Exists
 		if(!empty($name)){
 		$check = countAndSelect('name', 'Categories' , $name);
@@ -254,12 +258,13 @@ $do = isset($_GET['do'])? $_GET['do']: $do = 'Manage';
 		             redirectHome($error, 'back');
 	            } else{
 	             	//Insert this info into Database 
-				   	$stmt =  $connect->prepare("INSERT INTO `categories`(Name, DesBox, Ordering, Visible, Allow_Comment, Allow_Ads) 
-				   		VALUES (:name, :des, :order, :vis, :comm , :ads)");
+				   	$stmt =  $connect->prepare("INSERT INTO `categories`(Name, DesBox, Ordering, Parent, Visible, Allow_Comment, Allow_Ads) 
+				   		VALUES (:name, :des, :order,:parent, :vis, :comm , :ads)");
 				   	$stmt->execute(array(
 				   		':name'  => $name,
 				   		':des'   => $desc,
 				   		':order' => $order,
+				   		':parent'=> $catType,
 				   		':vis'   => $visibility,
 				   		':comm'  => $allowComment,
 				   		':ads'   => $allowAds
@@ -339,6 +344,31 @@ $do = isset($_GET['do'])? $_GET['do']: $do = 'Manage';
 					</div>
 				</div>
 				<!--End Ordering-->
+				<!--Start Category Type-->
+				<div class="form-group">
+					<label class="col-sm-2 control-label">
+					Category Type
+				    </label>
+					<div class="col-sm-10 col-md-6">
+					<select name='cat-type' required>
+							<option value="0" <?php if($row['Parent'] == 0): echo 'selected'; endif;?>>Main</option>
+							<?php 
+							foreach ($cats as $cat) {
+							echo "<option value='". $cat['ID'] . "'";
+								if($row['Parent'] == $cat['ID']){
+								 echo 'selected'; 
+								
+							}
+							
+							echo ">" .
+							 $cat['Name'] . "</option>";
+							}
+							?>
+						</option>
+					</select>
+					</div>
+				</div>
+				<!--End Category Type-->
 				<!--Start Visibility-->
 				<div class="form-group">
 					<label class="col-sm-2 control-label">
@@ -420,6 +450,7 @@ $do = isset($_GET['do'])? $_GET['do']: $do = 'Manage';
 		$name     = $_POST['name'];
 		$desc     = $_POST['desc'];
 		$order    = $_POST['order'];
+		$catType  = $_POST['cat-type'];
 		$visible  = $_POST['visibility'];
 		$Comments = $_POST['comment'];
 		$ads      = $_POST['ads'];
@@ -438,8 +469,8 @@ $do = isset($_GET['do'])? $_GET['do']: $do = 'Manage';
 		         } else{
 		         	//Update Database with this info
 			     $stmt = $connect->prepare("UPDATE categories 
-				SET Name = ? , DesBox = ? ,  Ordering = ? , Visible = ? , Allow_Comment = ? , Allow_Ads = ?  where ID = ?");
-		     	$stmt->execute(array($name, $desc, $order, $visible , $Comments , $ads, $catid));
+				SET Name = ? , DesBox = ? ,  Ordering = ?, Parent = ? , Visible = ? , Allow_Comment = ? , Allow_Ads = ?  where ID = ?");
+		     	$stmt->execute(array($name, $desc, $order, $catType, $visible , $Comments , $ads, $catid));
 		     	//Echo Success Message
 		     	$success =  " <div class='container'>
 		     	              <div class='alert alert-success'>" .  $stmt->rowCount() . " Record Updated </div>";

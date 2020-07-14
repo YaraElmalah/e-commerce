@@ -182,10 +182,7 @@ $do = isset($_GET['do'])? $_GET['do']: $do = 'Manage';
 					<select name="category">
 						<option value="0"></option>
 						<?php 
-							$stmt2 = $connect->prepare("SELECT 
-								* FROM categories");
-							$stmt2->execute(); 
-							$cats = $stmt2->fetchAll();
+						$cats = getAllFrom("*", 'categories', "WHERE Parent = 0" , "ID");
 						foreach ($cats as $cat) {
 							echo "<option value='". $cat['ID'] . "'>" .
 							 $cat['Name'] . "</option>";

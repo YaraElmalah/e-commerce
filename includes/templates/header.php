@@ -66,8 +66,7 @@
     <div class="collapse navbar-collapse" id="nav-toggle">
       <ul class="nav navbar-nav navbar-right">
             <?php 
-               $categories = getAllFrom('*', 'categories', "" , 'Ordering' , 
-                'ASC');
+               $categories = getAllFrom('*', 'categories', "WHERE Parent = 0" , 'Ordering' ,  'ASC');
                 foreach ($categories as $cat) {
                   echo "<li><a href='categories.php?pageid=" . $cat['ID'] . '&pagename='. str_replace(' ', '-', $cat['Name']) . "'>" 
                   . $cat['Name'] . "</a></li>";
