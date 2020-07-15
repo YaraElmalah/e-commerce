@@ -5,6 +5,7 @@ $(function(){
 		$(this).toggleClass('selected').parent().next('.panel-body').fadeToggle(300);
 		($(this).hasClass('selected'))?$(this).html("<i class='fas fa-minus'></i>"):$(this).html("<i class='fas fa-plus'></i>");
 	})
+	
 	//Trigger The SelectBoxIt
 	$('select').selectBoxIt({
 		  autoWidth: false

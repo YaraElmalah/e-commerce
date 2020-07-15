@@ -161,10 +161,7 @@ $do = isset($_GET['do'])? $_GET['do']: $do = 'Manage';
 					<select name="member">
 						<option value="0"></option>
 						<?php 
-							$stmt = $connect->prepare("SELECT 
-								* FROM `shop-users`");
-							$stmt->execute(); 
-							$users = $stmt->fetchAll();
+						$users = getAllFrom("*", "`shop-users`", "WHERE RegStatus = 1" , "UserID");
 						foreach ($users as $user) {
 							echo "<option value='". $user['UserID'] . "'>" .
 							 $user['username'] . "</option>";
@@ -183,15 +180,30 @@ $do = isset($_GET['do'])? $_GET['do']: $do = 'Manage';
 						<option value="0"></option>
 						<?php 
 						$cats = getAllFrom("*", 'categories', "WHERE Parent = 0" , "ID");
+						$childCats = getAllFrom("*", 'categories', "WHERE Parent != 0" , "ID");
 						foreach ($cats as $cat) {
 							echo "<option value='". $cat['ID'] . "'>" .
 							 $cat['Name'] . "</option>";
+							foreach ($childCats as $c) {
+								if($cat['ID'] == $c['Parent']){
+									echo "<option value='" . $c['ID'] ."'>" . "- " . $c['Name'] . "</option>";
+								}
+							}
 						}
 				?>
 					</select>
 				</div>
 				</div>
 			   <!--End Category Field-->
+			   <!--Start Tags Field-->
+					<div class="form-group">
+						<label class="col-sm-2 control-label">Tags
+				   </label>
+					<div class="col-sm-10 col-md-6">
+						<input type="text" name="tags" class="form-control" placeholder="Write Keywords for your item separate by (,)">
+					</div>
+					</div>
+				<!--End Tags Field-->
 			   
 				<!--Start Submit-->
 				<div class="form-group">
@@ -219,6 +231,7 @@ $do = isset($_GET['do'])? $_GET['do']: $do = 'Manage';
 		$status      = $_POST['status'];
 		$members     = $_POST['member'];
 		$categories  = $_POST['category'];
+		$tags        = $_POST['tags'];
 		//Validate The Form
 		$formErrors = [];
 
@@ -249,9 +262,9 @@ $do = isset($_GET['do'])? $_GET['do']: $do = 'Manage';
 	           
 	             	//Insert this info into Database 
 				   	$stmt =  $connect->prepare("INSERT INTO items 
-				   		(Name , Description, Price, Origin, Status , MemberID, CatID , `Date`) 
+				   		(Name , Description, Price, Origin, Status , MemberID, CatID, tags , `Date`) 
 				   		VALUES 
-				   		(:item, :des , :price, :country, :status, :members, :cats , now())");
+				   		(:item, :des , :price, :country, :status, :members, :cats, :tags , now())");
 				   	$stmt->execute(array(
 				   		':item'    => $name,
 				   		':des'     => $desc,
@@ -259,7 +272,8 @@ $do = isset($_GET['do'])? $_GET['do']: $do = 'Manage';
 				   		':country' => $country,
 				   		':status'  => $status,
 				   		':members' => $members,
-				   		':cats'    => $categories
+				   		':cats'    => $categories,
+				   		':tags'    => $tags
 
 				   	));
 			     	//Echo Success Message
@@ -294,6 +308,7 @@ $do = isset($_GET['do'])? $_GET['do']: $do = 'Manage';
 		$stmt = $connect->prepare("SELECT * from items
 			WHERE itemID = ? "); //get this Item
 		$stmt->execute(array($itemid));
+		$items = 
 		$items = $stmt->fetch();
 		$count = $stmt-> rowCount();
 		//if We have a record then it must be > 0
@@ -400,11 +415,21 @@ $do = isset($_GET['do'])? $_GET['do']: $do = 'Manage';
 				<div class="col-sm-10 col-md-6">
 					<select name="category">
 						<?php 
-							$stmt2 = $connect->prepare("SELECT 
-								* FROM categories");
-							$stmt2->execute(); 
-							$cats = $stmt2->fetchAll();
+							$cats = getAllFrom("*", "categories", 
+							"WHERE Parent = 0", "Ordering" , "ASC");
+							$childCats = getAllFrom("*", "categories", 
+							"WHERE Parent != 0", "Ordering" , "ASC");
+
 						foreach ($cats as $cat) {
+								foreach ($childCats as $c) {
+								if($cat['ID'] == $c['Parent']){
+									echo "<option value'" . $c['ID'] ."'";
+									if($items['CatID'] == $c['ID']){
+								echo "selected";
+							  };
+									echo ">" . "- " . $c['Name'] . "</option>";
+								}
+							}
 							echo "<option value='". $cat['ID'] . "'";
 							if($items['CatID'] == $cat['ID']){
 								echo "selected";
@@ -416,6 +441,15 @@ $do = isset($_GET['do'])? $_GET['do']: $do = 'Manage';
 				</div>
 				</div>
 			   <!--End Category Field-->
+			    <!--Start Tags Field-->
+					<div class="form-group">
+						<label class="col-sm-2 control-label">Tags
+				   </label>
+					<div class="col-sm-10 col-md-6">
+						<input type="text" name="tags" class="form-control" placeholder="Write Keywords for your item separate by (,)" value="<?php echo $items['tags']?>">
+					</div>
+					</div>
+				<!--End Tags Field-->
 			   
 				<!--Start Submit-->
 				<div class="form-group">

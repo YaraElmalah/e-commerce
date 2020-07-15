@@ -21,13 +21,8 @@ if($do == 'Manage'){ //Manage Page
 		$query = "";
 	}
 	//We can add to the querry (WHERE groupID != 1 as no the the Admin included)
-					$stmt = $connect->prepare("
-						SELECT * FROM `shop-users`  
-						WHERE groupID != 1 $query
-						ORDER BY UserID DESC");
-					$stmt-> execute(); //Execute the Statement
-					//Assign To a Variable
-					$rows = $stmt-> FetchAll(); //get All members
+	     $rows = getAllFrom("*", '`shop-users`', 'WHERE groupID != 1' .
+	            $query, 'UserID');
 						if(!empty($rows)){
 	?>
 

@@ -94,9 +94,7 @@ $do = isset($_GET['do'])? $_GET['do']: $do = 'Manage';
 		    			     	echo "<a class='sub-cat' href='?do=Edit&catid= ". $c['ID']  . "'>" . $c['Name'] . "</a>";
 		    			     }
 		    			     }
-		    			      echo "<hr>";
-		    			
-		    				
+		    			      echo "<hr>";	
 		    			}
 		    		?>
 		    	</div>
