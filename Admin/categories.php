@@ -111,7 +111,6 @@ $do = isset($_GET['do'])? $_GET['do']: $do = 'Manage';
 	<div class="container">
 		<form class="form-horizontal form-lg" action="?do=Insert" method="POST">
 			<div class="form-group">
-
 				<!--Start Category name-->
 				<div class="form-group">
 					<label class="col-sm-2 control-label">

@@ -221,7 +221,7 @@ $LatestItems   =  getLatest('*', 'items', 'itemID', $order);
 <?php
 /*End Dashboard Page*/
 include $templates . 'footer.php';
-
+	
 } else{
 	header('location: index.php'); //if there's no Session return to the login Page
 	exit();

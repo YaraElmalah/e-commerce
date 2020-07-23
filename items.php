@@ -52,6 +52,20 @@ foreach ($itemDetail as $item => $itemSelf) {
 						 $myItem['member'];?></a></li>
 						  <li><span><i class="fas fa-mask"></i> Category:  </span><a href="categories.php?pageid=<?php echo $myItem['CatID'] . "&pagename=" . str_replace(' ', '-', $myItem['catName']) ?>"><?php echo
 						 $myItem['catName'];?></a></li>
+						 <li><span><i class="fas fa-tags"></i>Tags:  </span> <?php 
+						 $allTags = $myItem['tags'];
+						 if(!empty($allTags)){
+						 	 $allTags = explode(",", $allTags);
+						 foreach ($allTags as $tag ) {
+						 	$tag = str_replace(" ", "", $tag);
+						 	echo "<a class='text-capitalize mytags' href='tags.php?name=" . $tag . "'>" .  $tag . "</a>";
+						 }
+						} else{
+
+							echo "<p class='no-tags'>There is no tags to show</p>";
+						}
+						 ?></li>
+					
 					</ul>
 					</div>
 				</div>

@@ -231,7 +231,7 @@ $do = isset($_GET['do'])? $_GET['do']: $do = 'Manage';
 		$status      = $_POST['status'];
 		$members     = $_POST['member'];
 		$categories  = $_POST['category'];
-		$tags        = $_POST['tags'];
+		$tags        = strtolower($_POST['tags']);
 		//Validate The Form
 		$formErrors = [];
 
@@ -308,7 +308,6 @@ $do = isset($_GET['do'])? $_GET['do']: $do = 'Manage';
 		$stmt = $connect->prepare("SELECT * from items
 			WHERE itemID = ? "); //get this Item
 		$stmt->execute(array($itemid));
-		$items = 
 		$items = $stmt->fetch();
 		$count = $stmt-> rowCount();
 		//if We have a record then it must be > 0
@@ -413,28 +412,27 @@ $do = isset($_GET['do'])? $_GET['do']: $do = 'Manage';
 					<label class="col-sm-2 control-label"> Category: 
 			   </label>
 				<div class="col-sm-10 col-md-6">
-					<select name="category">
+<select name="category">
+						<option value="0"></option>
 						<?php 
-							$cats = getAllFrom("*", "categories", 
-							"WHERE Parent = 0", "Ordering" , "ASC");
-							$childCats = getAllFrom("*", "categories", 
-							"WHERE Parent != 0", "Ordering" , "ASC");
-
+						$cats = getAllFrom("*", 'categories', "WHERE Parent = 0" , "ID");
+						$childCats = getAllFrom("*", 'categories', "WHERE Parent != 0" , "ID");
 						foreach ($cats as $cat) {
-								foreach ($childCats as $c) {
+							echo "<option value='". $cat['ID'] . "'";
+							if($items['CatID'] == $cat['ID']){
+								echo 'selected';
+							}
+							echo ">" .
+							 $cat['Name'] . "</option>";
+							foreach ($childCats as $c) {
 								if($cat['ID'] == $c['Parent']){
-									echo "<option value'" . $c['ID'] ."'";
-									if($items['CatID'] == $c['ID']){
-								echo "selected";
-							  };
+									echo "<option value='" . $c['ID'] ."'";
+								if($items['CatID'] == $c['ID']){
+								echo 'selected';
+							}
 									echo ">" . "- " . $c['Name'] . "</option>";
 								}
 							}
-							echo "<option value='". $cat['ID'] . "'";
-							if($items['CatID'] == $cat['ID']){
-								echo "selected";
-							};
-							echo  ">" . $cat['Name'] . "</option>";
 						}
 				?>
 					</select>
@@ -526,7 +524,7 @@ $do = isset($_GET['do'])? $_GET['do']: $do = 'Manage';
 				}
 	} elseif ($do == 'Update'){
 		if($_SERVER['REQUEST_METHOD'] === "POST"){
-		echo "<h1 class='text-center'>Update Category</h1>"; 
+		echo "<h1 class='text-center'>Update Items</h1>"; 
 		//Get Variables From the Form
 		$id         = $_POST['id'];
 		$name       = $_POST['name'];
@@ -536,7 +534,8 @@ $do = isset($_GET['do'])? $_GET['do']: $do = 'Manage';
 		$status     = $_POST['status'];
 		$member     = $_POST['member'];
 		$category   = $_POST['category'];
-		//Validate The Form
+		$tags       = strtolower($_POST['tags']);
+ 		//Validate The Form
 		$formErrors = [];
 		if(empty($name)){
 			$formErrors[] = "Name can't <strong>empty</strong>";
@@ -566,10 +565,10 @@ $do = isset($_GET['do'])? $_GET['do']: $do = 'Manage';
 		         	//Update Database with this info
 			     $stmt = $connect->prepare("UPDATE items 
 				SET Name = ? , Description = ? ,  Price = ? , 
-				Origin = ? , Status = ? , MemberID = ? , CatID = ? 
+				Origin = ? , Status = ? , MemberID = ?, tags = ? , CatID = ? 
 				where itemID = ?");
 		     	$stmt->execute(array($name, $desc, $price, $country, 
-		     	$status, $member, $category, $id));
+		     	$status, $member, $tags,  $category, $id));
 		     	//Echo Success Message
 		     	$success =  " <div class='container'>
 		     	              <div class='alert alert-success'>" .  $stmt->rowCount() . " Record Updated </div>";
@@ -579,8 +578,9 @@ $do = isset($_GET['do'])? $_GET['do']: $do = 'Manage';
 			} else{
 				//Get The Errors
 	          foreach ($formErrors as $error) {
-				echo "<div class='alert alert-danger'>"  . 
+			$myError =  "<div class='alert alert-danger'>"  . 
 				$error . "</div>";
+				redirectHome($myError , 'back');
 			}
 			}
 			

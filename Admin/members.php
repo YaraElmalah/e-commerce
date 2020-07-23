@@ -116,6 +116,16 @@ if($do == 'Manage'){ //Manage Page
 					</div>
 				</div>
 				<!--End FullName-->
+				<!--Start Avatar-->
+				<div class="form-group">
+					<label class="col-sm-2 control-label">
+					User Avatar
+				</label>
+					<div class="col-sm-10 col-md-6">
+						<input type="file" name="avatar" class="form-control" autocomplete="off" required="required" placeholder="Your Full Name that Appear in Your Profile">
+					</div>
+				</div>
+				<!--End Avatar-->
 				<!--Start Submit-->
 				<div class="form-group">
 					<label class="col-sm-2 control-label"> 
@@ -124,7 +134,7 @@ if($do == 'Manage'){ //Manage Page
 						<input type="submit" value="Add" class="btn btn-primary btn-lg">
 					</div>
 				</div>
-				<!--End FullName-->
+				<!--End Submit-->
 				
 			</div>
 		</form>

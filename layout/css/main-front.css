@@ -136,6 +136,20 @@ color: #5cb85c
 .item-info ul li{
 padding: 10px
 }
+.item-info ul li .mytags{
+	display: inline-block;
+	background: #e2e2e2;
+	padding: 2px 10px;
+	border-radius: 5px;
+	color: #666;
+	margin-right: 5px
+}
+.item-info ul li p.no-tags{
+	font-style: italic;
+	font-family: 'Lobster';
+	display: inline;
+	color: #a09898
+}
 .add-comment h3{
 	font-family: Lobster;
 	margin: 0 0 10px
