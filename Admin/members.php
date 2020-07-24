@@ -34,6 +34,7 @@ if($do == 'Manage'){ //Manage Page
 		<table class="table table-bordered text-center main-table">
 			<tr>
 				<th class="text-uppercase">#id</th>
+				<th class="text-uppercase">avatar</th>
 				<th class="text-capitalize">username</th>
 				<th class="text-capitalize">email</th>
 				<th class="text-capitalize">full name</th>
@@ -44,6 +45,11 @@ if($do == 'Manage'){ //Manage Page
 					foreach ($rows as $row) {
 						 echo "<tr>";
 						 echo "<td>" . $row['UserID'] . "</td>";
+						 if(!empty($row['avatar'])){
+						 echo "<td>" . "<img src='Uploads\Avatars\\" .$row['avatar'] ."'> </td>";
+						} else{
+							echo "<td> <img src='../item-avatar.png'></td>";
+						}
 						 echo "<td>" . $row['username'] . "</td>";
 						 echo "<td>" . $row['Email'] . "</td>";
 						 echo "<td>" . $row['Full-Name'] . "</td>";
@@ -122,7 +128,7 @@ if($do == 'Manage'){ //Manage Page
 					User Avatar
 				</label>
 					<div class="col-sm-10 col-md-6">
-						<input type="file" name="avatar" class="form-control" autocomplete="off" required="required" placeholder="Your Full Name that Appear in Your Profile">
+						<input type="file" name="avatar" class="form-control" autocomplete="off" placeholder="Your Full Name that Appear in Your Profile">
 					</div>
 				</div>
 				<!--End Avatar-->
@@ -250,9 +256,6 @@ elseif ($do == "Update") {
 		if (strlen($username) < 4) {
 			$formErrors[] = "Full Name can't be smaller than<strong> 4 Characters</strong>";
 		}
-		if (strlen($username) > 14) {
-			$formErrors[] = "Full Name can't be larger than<strong> 14 Characters</strong>";
-		}
 	     	
 			//Database Query
 			//Check if There is no errors 
@@ -269,7 +272,7 @@ elseif ($do == "Update") {
 		         } else{
 		         	//Update Database with this info
 			     $stmt = $connect->prepare("UPDATE `shop-users` 
-				SET username = ? , Email = ? ,  `Full-Name` = ? where UserID = ?");
+				SET username = ? , Email = ? ,  `Full-Name` = ?  WHERE UserID = ?");
 		     	$stmt->execute(array($username, $email, $full, $id));
 		     	//Echo Success Message
 		     	$success =  " <div class='container'>
@@ -309,9 +312,18 @@ elseif ($do == "Insert") { //Insert Page
 		$avatarTemp   = $_FILES['avatar']['tmp_name'];
 		$avatarType   = $_FILES['avatar']['type'];
 		//List of Allowed Extensions(type of the img)
-		$avatarExtension = array("jpeg", "jpg", "png", "gif"); //important for security
+		$allowedavatarExtension = array("jpeg", "jpg", "png", "gif"); //important for security
+		//get Avatar Extension 
+		$avatarExtension = end(explode('.' , $avatarName));
 		//Validate The Form
 		$formErrors = [];
+		if(!empty($avatarExtension) && !in_array($avatarExtension, $allowedavatarExtension)){
+			$formErrors[] = "This Extension is not allowed";
+
+		}
+		if($avatarSize > 4194304){
+					$formErrors[] = 'Avatar Can not be larger than <strong> 4 MB </strong>';
+				}
 
 		if(empty($username)){
 			$formErrors[] = "Username can't <strong>empty</strong>";
@@ -334,26 +346,29 @@ elseif ($do == "Insert") { //Insert Page
 		//Database Query
 			//Check if There is no errors 
 			if(empty($formErrors)){
+				$avatar = rand(0, 10000000000) . '_' . $avatarName;
+				move_uploaded_file($avatarTemp, "Uploads\Avatars\\" . $avatar);
 				$check = checkItem('username','`shop-users`', $username);
 	            if($check == 1){
 		             $error =  "<div class='container'>
 		                        <div class='alert alert-danger'>The username is already existed</div>";
 		             redirectHome($error, 'back');
-	            } /*else{
+	            } else{
 	             	//Insert this info into Database 
-				   	$stmt =  $connect->prepare("INSERT INTO `shop-users`(username, Password, Email, `Full-Name`,RegStatus ,date) 
-				   		VALUES (:user, :pass, :mail, :full, 1 ,now())");
+				   	$stmt =  $connect->prepare("INSERT INTO `shop-users`(username, Password, Email, `Full-Name`,RegStatus ,date , avatar) 
+				   		VALUES (:user, :pass, :mail, :full, 1 ,now(), :av)");
 				   	$stmt->execute(array(
 				   		':user' => $username,
 				   		':pass' => $hashedPass,
 				   		':mail' => $email,
-				   		':full' => $full
+				   		':full' => $full,
+				   		':av'   => $avatar
 				   	));
 			     	//Echo Success Message
 			     	$success = "<div class='container'>
 			     	            <div class='alert alert-success'>" .  $stmt->rowCount() . " Member Added</div>";
 			     	redirectHome($success, 'back');
-				}*/
+				}
 		    
 			}  else{
 				//Get The Errors

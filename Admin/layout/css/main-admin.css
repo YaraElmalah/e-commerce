@@ -310,7 +310,10 @@ background-color: #2e86de
 	background-color: #fff;
 	vertical-align: middle !important;
 }
-
+.main-table img{
+	width: 50px;
+	height: 50px
+}
 .main-table .btn{
 	padding: 3px 10px;
 	margin-bottom: 5px
