@@ -72,7 +72,7 @@ if($do == 'Manage'){ //Manage Page
 
 	<h1 class="text-center">Add New Member</h1>
 	<div class="container">
-		<form class="form-horizontal form-lg" action="?do=Insert" method="POST">
+		<form class="form-horizontal form-lg" action="?do=Insert" method="POST" enctype="multipart/form-data">
 			<div class="form-group">
 				<!--Start Username-->
 				<div class="form-group">
@@ -298,11 +298,18 @@ elseif ($do == "Insert") { //Insert Page
        if($_SERVER['REQUEST_METHOD'] === "POST"){
 		echo "<h1 class='text-center'>Insert </h1>"; 
 		//Get Variables From the Form
-		$username = $_POST['username'];
-		$email = $_POST['email'];
-		$full = $_POST['full-name'];
-		$pass = $_POST['password'];
-		$hashedPass = sha1($pass);
+		$username     = $_POST['username'];
+		$email        = $_POST['email'];
+		$full         = $_POST['full-name'];
+		$pass         = $_POST['password'];
+		$hashedPass   = sha1($pass);
+		$avatar       = $_FILES['avatar']; //gives You all the info about name, size, extension, path
+		$avatarName   = $_FILES['avatar']['name'];
+		$avatarSize   = $_FILES['avatar']['size'];
+		$avatarTemp   = $_FILES['avatar']['tmp_name'];
+		$avatarType   = $_FILES['avatar']['type'];
+		//List of Allowed Extensions(type of the img)
+		$avatarExtension = array("jpeg", "jpg", "png", "gif"); //important for security
 		//Validate The Form
 		$formErrors = [];
 
@@ -332,7 +339,7 @@ elseif ($do == "Insert") { //Insert Page
 		             $error =  "<div class='container'>
 		                        <div class='alert alert-danger'>The username is already existed</div>";
 		             redirectHome($error, 'back');
-	            } else{
+	            } /*else{
 	             	//Insert this info into Database 
 				   	$stmt =  $connect->prepare("INSERT INTO `shop-users`(username, Password, Email, `Full-Name`,RegStatus ,date) 
 				   		VALUES (:user, :pass, :mail, :full, 1 ,now())");
@@ -346,9 +353,9 @@ elseif ($do == "Insert") { //Insert Page
 			     	$success = "<div class='container'>
 			     	            <div class='alert alert-success'>" .  $stmt->rowCount() . " Member Added</div>";
 			     	redirectHome($success, 'back');
-				}
+				}*/
 		    
-			} else{
+			}  else{
 				//Get The Errors
 				echo "<div class='container'>";
 	          foreach ($formErrors as $error) {
